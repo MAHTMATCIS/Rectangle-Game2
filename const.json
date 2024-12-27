@@ -1,0 +1,56 @@
+{
+  "image": [
+    {"flower1": "img/flower1.png"},
+    {"flower2": "img/flower2.png"},
+    {"flown": "img/flown.png"},
+    {"grass": "img/grass.png"},
+    {"else": "img/else.png"},
+    {"item.normal": "img/item/normal.png"},
+    {
+      "item.wide": "img/item/wide.png"
+    },
+    {
+      "item.puncture": "img/item/puncture.png"
+    },
+    {"weapon.none": "img/weapon/none.png"}
+  ],
+  "item_type": [
+    "normal",
+    "wide",
+    "puncture"
+  ],
+  "weapon_type": [
+    "none"
+  ],
+  "item.info": {
+    "normal": {
+      "size": 20,
+      "forge": [
+        0,
+        0,
+        255
+      ],
+      "damage": "self.lvl-1",
+      "sp": 6,
+      "timesleep": "0.1"
+    },
+    "wide": {
+      "size": 40,
+      "forge": [
+        255,
+        255,
+        0
+      ],
+      "damage": "self.lvl*2",
+      "sp": 3,
+      "timesleep": "10//lvl[ind]"
+    },
+    "puncture": {
+      "size": 20,
+      "forge": "#99D9EA",
+      "damage": "self.lvl*2",
+      "sp": 5,
+      "timesleep": "10//(lvl[ind]/2)"
+    }
+  }
+}
