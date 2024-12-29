@@ -10,14 +10,31 @@
       "item.wide": "img/item/wide.png"
     },
     {
+      "item.phosphor": "img/item/phosphor.png"
+    },
+    {
       "item.puncture": "img/item/puncture.png"
     },
-    {"weapon.none": "img/weapon/none.png"}
+    {
+      "item.lightning": "img/item/lightning.png"
+    },
+    {
+      "item.healthPoint": "img/item/healthPoint.png"
+    },
+    {
+      "item.none": "img/weapon/none.png"
+    }
   ],
   "item_type": [
     "normal",
     "wide",
-    "puncture"
+    "puncture",
+    "phosphor",
+    "lightning",
+    "healthPoint"
+  ],
+  "bonus_type": [
+    "healthPoint"
   ],
   "weapon_type": [
     "none"
@@ -51,6 +68,27 @@
       "damage": "self.lvl*2",
       "sp": 5,
       "timesleep": "10//(lvl[ind]/2)"
+    },
+    "phosphor": {
+      "size": 25,
+      "forge": "#DFFF26",
+      "damage": "self.lvl*2",
+      "sp": 2,
+      "timesleep": "30//(lvl[ind]/2)"
+    },
+    "lightning": {
+      "size": 30,
+      "forge": "#73FBFD",
+      "damage": "self.lvl*2",
+      "sp": 5,
+      "timesleep": "20//(lvl[ind]*2)"
+    }
+  },
+  "bonus.info": {
+    "healthPoint": {
+      "health": "0",
+      "damage": "self.bonuslvl[index]",
+      "timesleep": "0"
     }
   }
 }

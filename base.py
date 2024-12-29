@@ -6,7 +6,8 @@
 # |__|_| \__/_/ |__|_|  /__/_/    \__\_\ |__|_|  |__|_|      ⌊__⌋_⌋      |__|_| \__/_/ |__|_| /__/_/    \__\_\      ⌊__⌋_⌋         \_______|_|  |__|_|   |______/_/  #
 ######################################################################################################################################################################
 import math
-from random import  randint, uniform
+from random import randint, uniform
+from traceback import print_exc
 
 import pygame
 import pygame.freetype
@@ -25,6 +26,7 @@ image.init()
 class Entity:
     def __init__(self, surface: pygame.Surface, x, y, size=100, forge=(0, 0, 0, 0), width=2, border=(0, 0, 0, 0),
                  center=(0, 0), scale=1, notupd=0):
+        self.ima = 1
         self.image2 = None
         self.self2 = None
         self.self1 = None
@@ -88,7 +90,7 @@ class Entity:
             x2 = self.y - x.y
         return (x1 ** 2 + x2 ** 2) ** 0.5
 
-    def update(self, x=0, y=0, scale=1, center=(0, 0), mouse=(0, 0)):
+    def update(self, x=0, y=0, scale=1, center=(0, 0), mouse=(0, 0), chima=-1):
         self.center = center
         self.x += x
         self.y += y
@@ -113,12 +115,17 @@ class Entity:
                                        [int(self.size * self.scale), int(self.size * self.scale)]], self.width)
         text = str(round(self.health, 3)) + "/" + str(self.max_health)
         size = font.arial.get_rect(text).size[0]
+        if chima == -1:
+            pass
+        else:
+            self.ima = chima
         if self.image is not None:
             if self.image2 is None:
                 self.image2 = self.image
             if flg:
                 self.image2 = pygame.transform.scale(self.image, (
-                    self.scale * self.image.get_rect().size[0] + 1, self.scale * self.image.get_rect().size[1] + 1))
+                    self.ima * self.scale * self.image.get_rect().size[0] + 1,
+                    self.ima * self.scale * self.image.get_rect().size[1] + 1))
             self.surface.blit(self.image2, ((self.x - self.size - self.center[0]) * self.scale + self.center[0],
                                             (self.y - self.size - self.center[1]) * self.scale + self.center[1]))
         self.healtht = font.arial.render_to(self.surface,
@@ -192,7 +199,7 @@ class Num:
         return self.time <= 0
 
     def tick(self, lst):
-        self.y-=5
+        self.y -= 5
         if self.islife():
             lst.remove(self)
         self.time -= 1
@@ -207,9 +214,9 @@ class Num:
         text = str(-self.num)
         size = font.arial.get_rect(text).size[0]
         try:
-            font.arial.render_to(self.surface, [int((x - size / 2 - self.center[0]) * self.scale) + self.center[0]+2,
-                                                int((y - self.center[1]) * self.scale + self.center[1])+2], text,
-                                 (255,255,255))
+            font.arial.render_to(self.surface, [int((x - size / 2 - self.center[0]) * self.scale) + self.center[0] + 2,
+                                                int((y - self.center[1]) * self.scale + self.center[1]) + 2], text,
+                                 (255, 255, 255))
             font.arial.render_to(self.surface, [int((x - size / 2 - self.center[0]) * self.scale) + self.center[0],
                                                 int((y - self.center[1]) * self.scale + self.center[1])], text,
                                  self.color)
@@ -220,6 +227,7 @@ class Num:
 class Pond(Entity):
     def __init__(self, *args, **kwargs):
         # todo 解析类型
+        self.ticks = 0
         self.speed = [0, 0]
         self.type = kwargs['type']
         del kwargs['type']
@@ -229,6 +237,10 @@ class Pond(Entity):
         del kwargs['lvl']
         self.target = kwargs['target']
         del kwargs['target']
+        self.bonus = kwargs['bonus']
+        del kwargs['bonus']
+        self.bonuslvl = kwargs['bonuslvl']
+        del kwargs['bonuslvl']
         try:
             anglefix = kwargs['anglefix']
             del kwargs['anglefix']
@@ -245,7 +257,10 @@ class Pond(Entity):
                 self.damage += eval(val['damage'])
                 kwargs['size'] = val['size']
                 self.sp = val['sp']
-
+        for key, val in item_info.bonusInfo.items():
+            for index, i in enumerate(self.bonus):
+                if i == key and i is not None:
+                    self.damage += eval(val['damage'])
 
         super().__init__(*args, **kwargs)
         self.update(center=self.center, scale=self.scale)
@@ -273,12 +288,34 @@ class Pond(Entity):
     def is_in(self, x):
         return self.self1.colliderect(x.self1)
 
-    def colliderect(self, lst, plst, numlst):
+    def colliderect(self, lst, plst, numlst, anima):
         for i in lst:
             if self.is_in(i):
                 try:
                     if self.typ != 'puncture':
                         plst.remove(self)
+                    if self.typ == "phosphor":
+
+                        for j in range(1):
+                            p = Pond(  # phosphor
+                                self.surface, self.x, self.y, typ='phosphor', lvl=1, center=self.self1.center,
+                                scale=self.scale,
+                                type=1, target=self.target
+                            )
+                            p.type = 1
+                            plst.append(p)
+                    if self.typ == "lightning":
+                        sor = sorted(lst, key=self.distance)
+                        for i in range(self.lvl + 2):
+                            if self.distance(sor[i]) < self.lvl * 100 + 200:
+                                ani = LightAnim(self.surface, self.x, self.y, end=sor[i])
+                                ani.ticks = 10
+                                anima.append(ani)
+                                sor[i].health -= self.damage
+                                num = Num(self.surface, self.scale, self.center, self.damage, sor[i].x, sor[i].y)
+                                numlst.append(num)
+                        return
+
                     i.health -= self.damage
                     num = Num(self.surface, self.scale, self.center, self.damage, self.x, self.y)
                     numlst.append(num)
@@ -286,6 +323,7 @@ class Pond(Entity):
                     pass
 
     def tick(self, player, plst):
+        self.ticks += 1
         if self.distance(player) > contact.pondmaxdis:
             if self.typ != 'puncture':
                 plst.remove(self)
@@ -298,11 +336,13 @@ class Pond(Entity):
         self.power = [self.power[0] / contact.holval, self.power[1] / contact.holval]
 
     def update(self, x=0, y=0, scale=1, center=(0, 0)):
-        self.x+=x
-        self.y+=y
+        self.x += x
+        self.y += y
         self.center = center
         self.scale = scale
-        self.self2 = pygame.draw.rect(self.surface, self.forge,
+        forge = self.forge
+        if self.typ == 'lightning' and self.ticks % 2 == 1: forge = '#99D9EA'
+        self.self2 = pygame.draw.rect(self.surface, forge,
                                       [[(self.x - self.size // 2 - self.center[0]) * self.scale + self.center[0],
 
                                         (self.y - self.size // 2 - self.center[1]) * self.scale + self.center[1]],
@@ -315,6 +355,42 @@ class Pond(Entity):
                                         (self.y - self.size // 2 - self.center[1]) * self.scale + self.center[1]],
 
                                        [int(self.size * self.scale), int(self.size * self.scale)]], self.width)
+
+
+class Animation(Entity):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ticks = 0
+
+    def tick(self, anim):
+        self.ticks -= 1
+        if self.ticks < 0:
+            anim.remove(self)
+
+
+class LightAnim(Animation):
+    def __init__(self, *args, **kwargs):
+        self.end = kwargs['end']
+        del kwargs['end']
+        self.endx = self.end.x
+        self.endy = self.end.y
+        self.ticks = 0
+        super().__init__(*args, **kwargs)
+
+    def update(self, x=0, y=0, scale=1, center=(0, 0), mouse=(0, 0)):
+        self.x += x
+        self.y += y
+        self.endx += x
+        self.endy += y
+        self.scale = scale
+        self.center = center
+        self.self1 = pygame.draw.line(self.surface, "#73FBFD", (
+            (self.x - self.center[0]) * self.scale + self.center[0],
+            (self.y - self.center[1]) * self.scale + self.center[1]
+        ), (
+                                          (self.endx - self.center[0]) * self.scale + self.center[0],
+                                          (self.endy - self.center[1]) * self.scale + self.center[1]
+                                      ), self.ticks // 2)
 
 
 class Ptr:
@@ -361,9 +437,9 @@ class Player(Entity):
         return targe
 
     def update(self, x=0, y=0, scale=1, center=(0, 0), mouse=(0, 0)):
-        super().update(x,y,scale,center,mouse)
+        super().update(x, y, scale, center, mouse)
 
-    def addtick(self, tick, plst, elst, ponddam, dlst,ind):
+    def addtick(self, tick, plst, elst, ponddam, dlst, ind):
         if tick % 20 == 0 and self.health < self.max_health:
             self.health += 1
         for i in self.flst1:
@@ -371,24 +447,36 @@ class Player(Entity):
         for i in self.flst2:
             i.addtick(tick, plst, elst, self.flst2, ponddam, dlst)
 
-    def summon_pond(self, plst, elst, types=1, pondDamage=3, typ='normal', lvl=1):
+    def summon_pond(self, plst, elst, types=1, pondDamage=3, typ='normal', lvl=1, bonus=None, bonuslvl=None):
+        if bonus is None:
+            bonus = [None, None]
+        if bonuslvl is None:
+            bonuslvl = [None, None]
         ta = self.get_near(elst)
         if len(plst) < maxpondcount:
             if typ == 'puncture':
                 for i in range(-lvl + 1, lvl):
-                    p = Pond(
+                    p = Pond(  # puncture
                         self.surface, self.x, self.y, typ=typ, lvl=lvl, center=self.self1.center, scale=self.scale,
-                        type=1, target=ta, anglefix=i / 5
+                        type=1, target=ta, anglefix=i / 5, bonus=bonus, bonuslvl=bonuslvl
                     )
                     p.type = types
                     plst.append(p)
-                return
-            p = Pond(
-                self.surface, self.x, self.y, typ=typ, lvl=lvl, center=self.self1.center, scale=self.scale,
-                type=1, target=ta
-            )
-            p.type = types
-            plst.append(p)
+            if typ == 'phosphor':
+                for i in range(5):
+                    p = Pond(  # summon phosphor
+                        self.surface, self.x, self.y, typ=typ, lvl=lvl, center=self.self1.center, scale=self.scale,
+                        type=1, target=ta, anglefix=uniform(0., 6.28), bonus=bonus, bonuslvl=bonuslvl
+                    )
+                    p.type = types
+                    plst.append(p)
+            else:
+                p = Pond(
+                    self.surface, self.x, self.y, typ=typ, lvl=lvl, center=self.self1.center, scale=self.scale,
+                    type=1, target=ta, bonus=bonus, bonuslvl=bonuslvl
+                )
+                p.type = types
+                plst.append(p)
 
 
 class Death(Entity):
@@ -423,9 +511,13 @@ class Death(Entity):
         try:
             self.surface.blit(self.self2, [(self.x - self.size // 2 - self.center[0]) * self.scale + self.center[0],
 
-                                       (self.y - self.size // 2 - self.center[1]) * self.scale + self.center[1]])
+                                           (self.y - self.size // 2 - self.center[1]) * self.scale + self.center[1]])
         except pygame.error:
             pass
+
+
+class Item(Entity):
+    pass
 
 
 class Else(Entity):
@@ -478,8 +570,8 @@ class Else(Entity):
         self.bar.x += self.power[0]
         self.bar.y += self.power[1]
 
-    def update(self, x=0, y=0, scale=1, center=(0, 0), lst=None, score=None, numlst=None, dlst=None,diff=None):
-        super().update(x, y, scale, center)
+    def update(self, x=0, y=0, scale=1, center=(0, 0), lst=None, score=None, numlst=None, dlst=None, diff=None):
+        super().update(x, y, scale, center, chima=self.size / 50)
         if self.islife():
             try:
                 death = Death(self.surface, self.x, self.y, self.size, self.forge, self.width, self.border, self.center,
@@ -530,7 +622,7 @@ class Friend(Player):
         self.pond = 'normal'
 
     def addtick(self, tick, plst, elst, flst=None, ponddam=3, dlst=None):
-        pondspeed = 3 if self.types == 0 else 3 if self.types == 1 else 1
+        pondspeed = 5 if self.types == 0 else 3 if self.types == 1 else 2
         if flst:
             if self.islife():
                 flst.remove(self)

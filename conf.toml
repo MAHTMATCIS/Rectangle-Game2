@@ -5,6 +5,8 @@ icontitle="HELLO?"
 icon="icon.png"
 fullscreen=1
 fullsize=[2560,1600]
+noResolution = false                ####
+noWarning = false
 
 [test]
 test1=false
@@ -16,7 +18,7 @@ const="const.json"
 FPS = 60
 tick=20
 rectick=60
-randomtickspeed=20
+randomtickspeed = 1000
 seed="random"
 mousespeed=1
 cameraspeed=50
@@ -25,9 +27,9 @@ bg=[150,220,150]
 vsync=1
 depth=0
 
-maxelsecount = 50
+maxelsecount = 500
 pondmaxdis=5000
-maxpondcount=1000
+maxpondcount = 10000
 maxfriendcount=1500
 
 renderdistance=2000

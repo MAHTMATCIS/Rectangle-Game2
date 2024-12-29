@@ -17,4 +17,5 @@ pygame.init()
 raw = json.load(fp)['item.info']
 fp.seek(0)
 rawall = json.load(fp)
+bonusInfo = rawall['bonus.info']
 fp.close()

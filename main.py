@@ -1,3 +1,4 @@
+# coding:utf-8
 ######################################################################################################################################################################
 #  /¯¯¯¯\¯\  /¯¯¯¯\¯\       /¯¯¯¯\¯\     |¯¯|¯|  |¯¯|¯| ⌈¯¯¯¯¯¯¯¯¯¯¯¯⌉`⌉  /¯¯¯¯\¯\  /¯¯¯¯\¯\      /¯¯¯¯\¯\     ⌈¯¯¯¯¯¯¯¯¯¯¯¯⌉`⌉    /¯¯¯¯¯¯¯|¯|  |¯¯|¯|   /¯¯¯¯¯¯|¯|  #
 # /  /\  \ \/  /\  \ \     /  /\  \ \    |  | |  |  | | `¯¯¯¯⌉  ⌈¯⌈¯¯`¯` /  /\  \ \/  /\  \ \    /  /\  \ \    `¯¯¯¯⌉  ⌈¯⌈¯¯`¯`  /  / /¯¯¯¯`¯`  |  | |  |  |¯¯¯¯¯¯   #
@@ -5,14 +6,38 @@
 # |  | |\    / /|  | |   /  /____\  \ \  |  ⌈¯⌈¯¯|  | |      |  | |      |  | |\    / /|  | |  /  /____\  \ \       |  | |       \  \ \____._.  |  | |    _____  | | #
 # |__|_| \__/_/ |__|_|  /__/_/    \__\_\ |__|_|  |__|_|      ⌊__⌋_⌋      |__|_| \__/_/ |__|_| /__/_/    \__\_\      ⌊__⌋_⌋         \_______|_|  |__|_|   |______/_/  #
 ######################################################################################################################################################################
+import traceback
+
+awa = "awa"
+# awa
+qwq = "qwq"
+# qwq
+errorNumber1 = 114514
+# 114514
+errorNumber2 = 1919810
+# 1919810
+errorNumber = errorNumber1 | errorNumber2
+
 import sys
 from math import *
-from  tkinter import *
+from tkinter import *
 from tkinter.ttk import *
+import ctypes
+import contact
 
-win2=Tk()
-proc=Progressbar(win2, maximum=5)
-proc.pack(padx=10,pady=10)
+user32 = ctypes.windll.user32
+if contact.noResolution:
+    user32.SetProcessDPIAware()
+    if not contact.noWarning:
+        x = user32.MessageBoxA(0,
+                               "You are using the no resolution (ignoring system scaling) mode, which may cause unforeseen errors! Please consider carefully!\n\nSet 'noWarning' to 'true' in 'conf.toml' and ignore this prompt.\n\n你在使用无分辨率（忽略系统缩放）模式，这可能会导致无法预料的错误！请谨慎考虑！\n\n在“conf.toml”里将“noWarning”设为“true”忽略本提示。\n\nDo you want to continue playing?  是否继续游戏？".encode(
+                                   'gbk'), (contact.title + ': Warning!   警告！').encode('gbk'), 0x31)
+        if x == 2:
+            sys.exit(-1)
+
+win2 = Tk()
+proc = Progressbar(win2, maximum=5)
+proc.pack(padx=10, pady=10)
 win2.update()
 import multiprocessing
 
@@ -33,18 +58,18 @@ import random
 
 proc.config(value=2)
 win2.update()
-import contact
 import setting
 from contact import deathmessage, pausemessage, renderdistance, waitmessage, test2
 
 random.seed(contact.seed if contact.seed != 'random' else time.time())
 from base import *
 from font import *
+import time as timetime
 
 score = Numbers(0)
 difficult = Numbers(1)
 pondDamage = Numbers(5)
-ind=Numbers(0)
+ind = Numbers(0)
 proc.config(value=3)
 win2.update()
 
@@ -134,8 +159,8 @@ class MainWindow:
             return
         if len(self.elst) < contact.maxelsecount:
             elss = Else(self.surface, randint(-1000, self.size[0] + 1000), randint(-1000, self.size[1] + 1000),
-                        forge=(230, 0, 0), size=50 * int(difficult.num / 2 + 1), center=self.center,
-                        speed=uniform(1.0, 1.5) * (log2(int(difficult.num / 2 + 1))+int(difficult.num / 20 + 1)))
+                        forge=(230, 0, 0), size=int(50 * log(difficult.num / 2 + 1, 2)) + 25, center=self.center,
+                        speed=uniform(1.0, 1.5) * (log10(int(difficult.num * 2 + 1))) + 1)
             elss.max_health = elss.health = randint(10, 50) * difficult.num
             elss.image = image.raw['else']
             elss.damage = randint(1, 3) * difficult.num
@@ -156,21 +181,26 @@ class MainWindow:
             i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
                      self.scale, self.center, self.map, self.pos)
         self.player.update(*posabs, scale=self.scale, center=self.center, mouse=(
-        -self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed))
+            -self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed))
 
         for i in self.dlst:
             i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
                      self.scale, self.center)
         for i in self.elst:
             i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
-                     scale=self.scale, center=self.center, lst=self.elst, score=score, numlst=self.nlst, dlst=self.dlst,diff=difficult)
+                     scale=self.scale, center=self.center, lst=self.elst, score=score, numlst=self.nlst, dlst=self.dlst,
+                     diff=difficult)
         for i in self.nlst:
             i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
                      self.scale, self.center)
         for i in self.plst:
             i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
                      self.scale, self.center)
-        self.bag.update(ind.num, self.tick, self.player, self.elst, self.plst, ind)
+        self.bag.update(ind.num, self.tick, self.player, self.elst, self.plst, ind);
+        self.bag.sizey = self.center[1] * 2 - 100
+        for i in self.extra:
+            i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
+                     self.scale, self.center)
         if self.pause:
             for i in self.plst:
                 i.power = [0, 0]
@@ -188,47 +218,65 @@ class MainWindow:
                 self.surface = pygame.transform.grayscale(self.surface, self.surface)
             else:
                 ramp = 5
-                self.surface = pygame.transform.grayscale(self.surface, self.surface)
                 self.surface = pygame.transform.laplacian(self.surface, self.surface)
             if self.randomtick is not None:
                 if self.frame % ramp == 0:
                     self.surface.fill((0, 0, 0))
                 if self.randomtick != 0:
                     return
-                self.surface = pygame.transform.grayscale(self.surface, self.surface)
                 self.surface = pygame.transform.laplacian(self.surface, self.surface)
 
     def tickadd(self, tick):  #   相机运动与tick运动
-        if tick%10==0 and not self.ismaprefreshing.num:
-            self.map.fresh(self.surface,self.center,self.pos,self.ismaprefreshing)
+        t = timetime.time()
+        if tick % 10 == 0 and not self.ismaprefreshing.num:
+            self.map.fresh(self.surface, self.center, self.pos, self.ismaprefreshing)
         if self.randomtick is None or self.randomtick < 0:
             self.randomtick = getrandomtick()
             self.summon()
         else:
             self.randomtick -= 1
+        self.rendermap = (time.time() - t)
 
         win = getwin(pygame.display.get_wm_info())  # 获取中心点
         self.relcenter = win
+
+        t = timetime.time()
         for i in self.dlst:
             i.tick(tick, self.dlst)
+        self.renderd = (time.time() - t)
+        t = timetime.time()
         for i in self.elst:
             i.testin([self.player, *self.player.flst1, *self.player.flst2, *self.player.flst3], self.elst, self.nlst)
+        self.rendere = (time.time() - t)
+        t = timetime.time()
         for i in self.nlst:
             i.tick(self.nlst)
+        self.rendern = (time.time() - t)
+        t = timetime.time()
         for i in self.elst:
             i.tick([self.player, *self.player.flst1, *self.player.flst2,
                     *self.player.flst3] if self.life and not self.pause else [])
+        self.rendere += (time.time() - t)
+        t = timetime.time()
         for i in self.plst:
             i.tick(self.player, self.plst)
-            i.colliderect(self.elst, self.plst, self.nlst)
+            i.colliderect(self.elst, self.plst, self.nlst, self.extra)
+        self.renderp = (time.time() - t)
 
+        t = timetime.time()
+        for i in self.extra:
+            i.tick(self.extra)
+        self.renderextra = (time.time() - t)
+
+        t = timetime.time()
         for i in self.ilst:
             i.tick()
+        self.renderi = (time.time() - t)
 
         if self.player.islife():
             self.life = 0
             return
-        self.player.addtick(tick, self.plst, self.elst, pondDamage.num, self.dlst,ind)
+        self.player.addtick(tick, self.plst, self.elst, pondDamage.num, self.dlst, ind)
 
         self.posabs = [self.posabs[0] / contact.cameraspeed, self.posabs[1] / contact.cameraspeed]
         posabs = ((self.center[0] - self.player.x) / contact.cameraspeed + self.mouse[0] * contact.mousespeed,
@@ -243,7 +291,15 @@ class MainWindow:
             i.recv()
 
     def __init__(self):
-        global win2,renderdistance
+        self.renderi = 0
+        self.renderextra = 0
+        self.renderp = 0
+        self.rendern = 0
+        self.rendere = 0
+        self.renderd = 0
+        self.rendermap = 0
+        self.debug = 1
+        global win2, renderdistance
         pygame.init()
 
         proc.config(value=4)
@@ -269,7 +325,7 @@ class MainWindow:
         self.pause = 0
         self.loading = 1
         self.ismove = 1
-        self.ismaprefreshing=Numbers(0)
+        self.ismaprefreshing = Numbers(0)
         self.randomtick = None
         #const value
 
@@ -302,12 +358,13 @@ class MainWindow:
         self.plst = []
         self.ilst = []
         self.dlst = []
-        self.pos=Pos()
+        self.extra = []
+        self.pos = Pos()
         self.map = Map()
-        self.bag=Bag(self.surface,20,self.center[1]*2-100)
+        self.bag = Bag(self.surface, 20, self.center[1] * 2 - 100)
         for i in range(10):
             for j in range(10):
-                blo = Block(self.surface, i-5, j-5, self.center)
+                blo = Block(self.surface, i - 5, j - 5, self.center)
 
                 blo.init()
                 self.map.append(blo)
@@ -317,18 +374,24 @@ class MainWindow:
         #重置
 
         def addtick():
-            while self.life:
-                if not self.loading and not self.pause:
-                    self.tick += 1
+            try:
+                while self.life:
+                    if not self.loading and not self.pause:
+                        self.tick += 1
 
-                    self.tickadd(self.tick)
-                self.tickclock.tick(contact.tick)
+                        self.tickadd(self.tick)
+                    self.tickclock.tick(contact.tick)
+            except:
+                user32.MessageBoxA(0, traceback.format_exc().encode('gbk'), b'error', 0x10)
 
         def addrec():
-            while self.life:
-                if not self.loading and not self.pause:
-                    self.addrecv()
-                self.recvclock.tick(contact.rectick)
+            try:
+                while self.life:
+                    if not self.loading and not self.pause:
+                        self.addrecv()
+                    self.recvclock.tick(contact.rectick)
+            except:
+                user32.MessageBoxA(0, traceback.format_exc().encode('gbk'), b'error', 0x10)
 
         self.initmouse()
         self.settingwindow = None
@@ -339,32 +402,33 @@ class MainWindow:
 
         for i in range(1000):
             f = font.chin.size('BY `MAHTMATCIS`')[0]
-            self.surface.fill((0,0,0))
-            x=font.chin.render('BY `MAHTMATCIS`',1,(255*i//1000,255*i//1000,255*i//1000))
+            self.surface.fill((0, 0, 0))
+            x = font.chin.render('BY `MAHTMATCIS`', 1, (255 * i // 1000, 255 * i // 1000, 255 * i // 1000))
 
             self.surface.blit(x, [self.center[0] - f // 2, self.center[1]])
             pygame.display.flip()
             time.sleep(0.001)
-        for i in range(500,0,-1):
+        for i in range(500, 0, -1):
             f = font.chin.size('BY `MAHTMATCIS`')[0]
             self.surface.fill((0, 0, 0))
-            x = font.chin.render('BY `MAHTMATCIS`', 1, (255*i//500, 255*i//500, 255*i//500))
+            x = font.chin.render('BY `MAHTMATCIS`', 1, (255 * i // 500, 255 * i // 500, 255 * i // 500))
             self.surface.blit(x, [self.center[0] - f // 2, self.center[1]])
             pygame.display.flip()
             time.sleep(0.001)
-        self.alpha=255
-        self.suf2=pygame.Surface(self.size)
-        self.suf2.fill((0,0,0))
-        self.alp=0
+        self.alpha = 255
+        self.suf2 = pygame.Surface(self.size)
+        self.suf2.fill((0, 0, 0))
+        self.alp = 0
+        self.bagopen = 0
 
         while True:
             self.surface.fill(contact.bg)
-            if self.alpha>=0:
+            if self.alpha >= 0:
                 self.suf2.set_alpha(self.alpha)
-                self.alpha//=1.1
+                self.alpha //= 1.1
 
-            elif self.alp==0:
-                self.alp=1
+            elif self.alp == 0:
+                self.alp = 1
                 self.initmouse()
 
             self.fresh()
@@ -373,17 +437,28 @@ class MainWindow:
 
             arial.render_to(self.surface, (5, 65), 'score:' + str(score), (0, 0, 0))
             arial.render_to(self.surface, (5, 85), 'difficult:' + str(difficult), (0, 0, 0))
-            arial.render_to(self.surface, (5, 105), 'x,y:' + str(self.pos.x)+','+str(self.pos.y), (0, 0, 0))
-            ev=pygame.event.get()
-            if self.alpha>10:
-                self.initmouse();ev=[]
+            arial.render_to(self.surface, (5, 105),
+                            'x,y:' + str(self.pos.x.__round__(3)) + ',' + str(self.pos.y.__round__(3)), (0, 0, 0))
+            if self.debug:
+                arial.render_to(self.surface, (5, 125), '---DEBUG OPEN---', (0, 0, 0))
+                arial.render_to(self.surface, (5, 145), 'rederi:' + str(self.renderi), (0, 0, 0))
+                arial.render_to(self.surface, (5, 165), 'redere:' + str(self.rendere), (0, 0, 0))
+                arial.render_to(self.surface, (5, 185), 'redermap:' + str(self.rendermap), (0, 0, 0))
+                arial.render_to(self.surface, (5, 205), 'rederd:' + str(self.renderd), (0, 0, 0))
+                arial.render_to(self.surface, (5, 225), 'rederextra:' + str(self.renderextra), (0, 0, 0))
+                arial.render_to(self.surface, (5, 245), 'redern:' + str(self.rendern), (0, 0, 0))
+
+            ev = pygame.event.get()
+            if self.alpha > 10:
+                self.initmouse();
+                ev = []
 
             for event in ev:
 
                 if event.type == pygame.QUIT:
                     self.life = 0
                     pygame.quit()
-                    sys.exit()
+                    sys.exit(-1)
 
                 elif event.type == pygame.KEYDOWN:
                     print(event.key)
@@ -393,14 +468,14 @@ class MainWindow:
                     elif event.key == pygame.K_ESCAPE:
                         self.life = 0
                         pygame.quit()
-                        sys.exit()
+                        sys.exit(-1)
                     elif event.key == 1073742050:
                         self.ismove = not self.ismove
                         pygame.mouse.set_visible(self.ismove)
                         self.initmouse()
                     elif event.key == 1073741883:
                         self.stopsummon = not self.stopsummon
-                    elif event.key == pygame.K_F1:
+                    elif event.key == pygame.K_F1 and self.ticing and self.life:
                         self.pause = not self.pause
                         pygame.mouse.set_visible(self.pause)
                         self.initmouse()
@@ -421,9 +496,18 @@ class MainWindow:
                                 process = multiprocessing.Process(target=setting.Setting)
                                 process.start()
                                 self.settingwindow = process
-                    elif event.key==32 and not self.pause and self.life:
-                        self.player.health+=1
-                        nu=Num(self.surface,self.scale,self.center,-1,self.player.x,self.player.y)
+
+                    elif event.key == 101 and self.life and self.ticing:  # e
+                        self.pause = not self.pause
+                        self.bagopen = not self.bagopen
+                        if self.bagopen:
+                            self.pause = 1
+                        pygame.mouse.set_visible(self.pause)
+                        self.initmouse()
+
+                    elif event.key == 32 and not self.pause and self.life:
+                        self.player.health += 1
+                        nu = Num(self.surface, self.scale, self.center, -1, self.player.x, self.player.y)
                         self.nlst.append(nu)
 
 
@@ -440,6 +524,7 @@ class MainWindow:
                     self.initmouse()
 
                 elif event.type == pygame.MOUSEMOTION and self.mousemoving == 0 and self.ismove == 1:
+                    pos = event.pos
                     if self.ticing == 0 and self.pause == 0:
                         threading.Thread(target=addtick).start()  # about tick
                         threading.Thread(target=addrec).start()  # about tick
@@ -459,8 +544,10 @@ class MainWindow:
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     ch(self.scale)
+                    if self.bagopen:
+                        self.bag.click(event)
                     if event.button == 1 and not self.pause and self.life:
-                        self.player.type = not self.player.type
+                        self.player.type = 1
                     if event.button == 4:
                         self.scale *= 1.1
                     if event.button == 5:
@@ -469,7 +556,7 @@ class MainWindow:
 
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1 and not self.pause and self.life:
-                        self.player.type = not self.player.type
+                        self.player.type = 0
 
             if not self.ticing:
                 f = font.chin.size(waitmessage)[0]
@@ -490,18 +577,22 @@ class MainWindow:
                 x2 = font.chin.render(deathmessage, True, (255, 255, 255))
                 self.surface.blit(x, [self.center[0] - f // 2, self.center[1] + 10])
                 self.surface.blit(x2, [self.center[0] - f // 2 + 2, self.center[1] + 10 + 2])
-            elif self.pause:
+            elif self.pause and not self.bagopen:
                 f = font.chin.size(pausemessage)[0]
                 x = font.chin.render(pausemessage, True, (255, 0, 0))
                 x2 = font.chin.render(pausemessage, True, (255, 255, 255))
                 self.surface.blit(x2, [self.center[0] - f // 2 + 2, self.center[1] + 10 + 2])
                 self.surface.blit(x, [self.center[0] - f // 2, self.center[1] + 10])
 
+            elif self.bagopen:
+                self.bag.background(self.center)
+                self.bag.moving(pos)
+
             x = font.small.render('by MAHTMATCIS,FOLLOW and SUBSCRIBE!', True, (0, 0, 0))
             x2 = font.small.render('by MAHTMATCIS,FOLLOW and SUBSCRIBE!', True, (255, 255, 255))
-            self.surface.blit(x2, [12, self.center[1]*2 - 20 + 2])
-            self.surface.blit(x, [10, self.center[1]*2 - 20])
-            self.surface.blit(self.suf2,(0,0))
+            self.surface.blit(x2, [12, self.center[1] * 2 - 20 + 2])
+            self.surface.blit(x, [10, self.center[1] * 2 - 20])
+            self.surface.blit(self.suf2, (0, 0))
             pygame.display.update()
             self.clock.tick(self.FPS)
 
@@ -545,4 +636,9 @@ class MainWindow:
 
 
 if __name__ == '__main__':
-    main = MainWindow()
+    try:
+        main = MainWindow()
+    except SystemExit:
+        pass
+    except:
+        user32.MessageBoxA(0, traceback.format_exc().encode('gbk'), b'error', 0x10)
