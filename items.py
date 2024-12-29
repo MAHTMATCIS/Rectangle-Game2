@@ -48,6 +48,20 @@ class Bag:
         self.selectlvl = None
         self.selectbonus = [None, None]
         self.selectbonuslvl = [None, None]
+
+        self.craft_bag = list([[None for __ in range(3)] for _ in range(3)])
+        self.craft_lvl = list([[None for __ in range(3)] for _ in range(3)])
+        self.craft_blocks = list([[None for __ in range(3)] for _ in range(3)])
+        self.craft_bonus = list([[[None, None] for __ in range(3)] for _ in range(3)])
+        self.craft_bonuslvl = list([[[None, None] for __ in range(3)] for _ in range(3)])
+
+        self.craft_result_bag = list([[None for __ in range(3)] for _ in range(3)])
+        self.craft_result_lvl = list([[None for __ in range(3)] for _ in range(3)])
+        self.craft_result_blocks = list([[None for __ in range(3)] for _ in range(3)])
+        self.craft_result_bonus = list([[[None, None] for __ in range(3)] for _ in range(3)])
+        self.craft_result_bonuslvl = list([[[None, None] for __ in range(3)] for _ in range(3)])
+
+
         self.additem('lightning', 6, ['healthPoint', 'healthPoint'], [10, 10])
         self.additem('lightning', 6, ['healthPoint', 'healthPoint'], [1, 1])
         self.additem('lightning', 6)
@@ -208,6 +222,7 @@ class Bag:
                 x = pygame.draw.rect(self.surface, 'white', (
                     (minim // 7 * indexi + 120, minim // 7 * indexj + 120), (minim // 7 - 5, minim // 7 - 5)), 3, 10)
                 self.blocks[indexi][indexj] = x
+
         for indexi, item2 in enumerate(items):
             if item2 is None:
                 pass
@@ -235,6 +250,47 @@ class Bag:
             x = pygame.draw.rect(self.surface, 'white', (
                 (minim // 7 * indexi + 120, minim // 7 * 5 + 140), (minim // 7 - 5, minim // 7 - 5)), 3, 10)
             self.itemblocks[indexi] = x
+
+        for indexi, item1 in enumerate(self.craft_bag):
+            for indexj, item2 in enumerate(item1):
+                if item2 is None:
+                    pass
+                else:
+                    x = font.small.render(str(self.craft_lvl[indexi][indexj]), True, (0, 0, 0))
+                    x2 = font.small.render(str(self.craft_lvl[indexi][indexj]), True, (255, 255, 255))
+                    item = pygame.transform.scale(itemdict[item2], ((minim // 7 - 5), (minim // 7 - 5)))
+                    self.surface.blit(item, (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120))
+                    self.surface.blit(x,
+                                      (minim // 7 * indexi + 120 + 10 + minim // 7 * 6, minim // 7 * indexj + 120 + 10))
+                    self.surface.blit(x2,
+                                      (minim // 7 * indexi + 120 + 8 + minim // 7 * 6, minim // 7 * indexj + 120 + 8))
+
+                    for indexx, ix in enumerate(self.craft_bonus[indexi][indexj]):
+                        if ix is not None:
+                            x1 = itemdict[ix]
+                            x1 = pygame.transform.scale(x1, ((minim // 7 - 5) / 5 * 2, (minim // 7 - 5) / 5 * 2))
+                            x = font.small.render(str(self.craft_bonuslvl[indexi][indexj][indexx]), True, (0, 0, 0))
+                            x2 = font.small.render(str(self.craft_bonuslvl[indexi][indexj][indexx]), True,
+                                                   (255, 255, 255))
+                            self.surface.blit(x1, (
+                            minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                            minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+                            self.surface.blit(x, (
+                            minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + 2 + minim // 7 * 6,
+                            minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2 + 2))
+                            self.surface.blit(x2, (
+                            minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                            minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+
+                pygame.draw.rect(self.surface, 'black', (
+                    (minim // 7 * indexi + 120 + 2 + minim // 7 * 6, minim // 7 * indexj + 120 + 2),
+                    (minim // 7 - 5, minim // 7 - 5)),
+                                 3,
+                                 10)
+                x = pygame.draw.rect(self.surface, 'white', (
+                    (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120),
+                    (minim // 7 - 5, minim // 7 - 5)), 3, 10)
+                self.craft_blocks[indexi][indexj] = x
 
     def click(self, event: pygame.event.Event):
         pos = event.pos
@@ -271,6 +327,22 @@ class Bag:
                         lvl[indexi] = sele2
                         bonus[indexi] = sele3
                         bonuslvl[indexi] = sele4
+            for indexi, item1 in enumerate(self.craft_blocks):
+                for indexj, item2 in enumerate(item1):
+                    if type(item2) == pygame.rect.Rect:
+                        if item2.collidepoint(pos):
+                            sele = self.select
+                            sele2 = self.selectlvl
+                            sele3 = self.selectbonus
+                            sele4 = self.selectbonuslvl
+                            self.select = self.craft_bag[indexi][indexj]
+                            self.selectlvl = self.craft_lvl[indexi][indexj]
+                            self.selectbonus = self.craft_bonus[indexi][indexj]
+                            self.selectbonuslvl = self.craft_bonuslvl[indexi][indexj]
+                            self.craft_bag[indexi][indexj] = sele
+                            self.craft_lvl[indexi][indexj] = sele2
+                            self.craft_bonus[indexi][indexj] = sele3
+                            self.craft_bonuslvl[indexi][indexj] = sele4
 
 
 def fresh():
