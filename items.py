@@ -34,6 +34,7 @@ for i in rawall['item_type']:
 
 class Bag:
     def __init__(self, surface, sizex, sizey):
+        self.point = image.raw['point']
         self.surface: pygame.Surface = surface
         self.sizex = sizex
         self.sizey = sizey
@@ -55,11 +56,11 @@ class Bag:
         self.craft_bonus = list([[[None, None] for __ in range(3)] for _ in range(3)])
         self.craft_bonuslvl = list([[[None, None] for __ in range(3)] for _ in range(3)])
 
-        self.craft_result_bag = list([[None for __ in range(3)] for _ in range(3)])
-        self.craft_result_lvl = list([[None for __ in range(3)] for _ in range(3)])
-        self.craft_result_blocks = list([[None for __ in range(3)] for _ in range(3)])
-        self.craft_result_bonus = list([[[None, None] for __ in range(3)] for _ in range(3)])
-        self.craft_result_bonuslvl = list([[[None, None] for __ in range(3)] for _ in range(3)])
+        self.craft_result_bag = None
+        self.craft_result_lvl = None
+        self.craft_result_blocks = None
+        self.craft_result_bonus = [None, None]
+        self.craft_result_bonuslvl = [None, None]
 
 
         self.additem('lightning', 6, ['healthPoint', 'healthPoint'], [10, 10])
@@ -69,14 +70,16 @@ class Bag:
         self.additem('lightning', 6, ['healthPoint', 'healthPoint'], [1, 1])
         self.additem('wide', 6)
         self.additem('wide', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('wide', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('wide', 6, ['healthPoint', 'healthPoint'], [1, 1])
+        self.additem('phosphor', 6, ['healthPoint', 'healthPoint'], [1, 1])
+        self.additem('puncture', 6, ['healthPoint', 'healthPoint'], [1, 1])
         self.additem('lightning', 6)
-        self.additem('lightning', 6)
+        self.additem('puncture', 6)
         self.additem('normal', 6, ['healthPoint', 'healthPoint'], [1, 1])
         self.additem('normal', 6, ['healthPoint', 'healthPoint'], [1, 1])
         self.additem('wide', 6)
         self.additem('healthPoint', 6)
+        self.additem('normal', 1)
+        self.additem('normal', 1)
 
     def additem(self, types, lvls, bonuses=None, bonuslvls=None):
         if bonuses is None:
@@ -292,7 +295,55 @@ class Bag:
                     (minim // 7 - 5, minim // 7 - 5)), 3, 10)
                 self.craft_blocks[indexi][indexj] = x
 
+        indexi = 3;
+        indexj = 1
+        point = pygame.transform.scale(self.point, ((minim // 7 - 5), (minim // 7 - 5)))
+        self.surface.blit(point, (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120))
+
+        item2 = self.craft_result_bag
+        indexi = 4;
+        indexj = 1
+        if item2 is None:
+            pass
+        else:
+            x = font.small.render(str(self.craft_result_lvl), True, (0, 0, 0))
+            x2 = font.small.render(str(self.craft_result_lvl), True, (255, 255, 255))
+            item = pygame.transform.scale(itemdict[item2], ((minim // 7 - 5), (minim // 7 - 5)))
+            self.surface.blit(item, (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120))
+            self.surface.blit(x,
+                              (minim // 7 * indexi + 120 + 10 + minim // 7 * 6, minim // 7 * indexj + 120 + 10))
+            self.surface.blit(x2,
+                              (minim // 7 * indexi + 120 + 8 + minim // 7 * 6, minim // 7 * indexj + 120 + 8))
+
+            for indexx, ix in enumerate(self.craft_result_bonus):
+                if ix is not None:
+                    x1 = itemdict[ix]
+                    x1 = pygame.transform.scale(x1, ((minim // 7 - 5) / 5 * 2, (minim // 7 - 5) / 5 * 2))
+                    x = font.small.render(str(self.craft_result_bonuslvl[indexx]), True, (0, 0, 0))
+                    x2 = font.small.render(str(self.craft_result_bonuslvl[indexx]), True,
+                                           (255, 255, 255))
+                    self.surface.blit(x1, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+                    self.surface.blit(x, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + 2 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2 + 2))
+                    self.surface.blit(x2, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+
+        pygame.draw.rect(self.surface, 'black', (
+            (minim // 7 * indexi + 120 + 2 + minim // 7 * 6, minim // 7 * indexj + 120 + 2),
+            (minim // 7 - 5, minim // 7 - 5)),
+                         3,
+                         10)
+        x = pygame.draw.rect(self.surface, 'white', (
+            (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120),
+            (minim // 7 - 5, minim // 7 - 5)), 3, 10)
+        self.craft_result_blocks = x
+
     def click(self, event: pygame.event.Event):
+
         pos = event.pos
         if event.button == 1:
             print(pos)
@@ -343,6 +394,38 @@ class Bag:
                             self.craft_lvl[indexi][indexj] = sele2
                             self.craft_bonus[indexi][indexj] = sele3
                             self.craft_bonuslvl[indexi][indexj] = sele4
+            item2 = self.craft_result_blocks
+            if type(item2) == pygame.rect.Rect:
+                if item2.collidepoint(pos) and self.select is None:
+                    self.craft_bag = list([[None for __ in range(3)] for _ in range(3)])
+                    self.craft_lvl = list([[None for __ in range(3)] for _ in range(3)])
+                    self.craft_blocks = list([[None for __ in range(3)] for _ in range(3)])
+                    self.craft_bonus = list([[[None, None] for __ in range(3)] for _ in range(3)])
+                    self.craft_bonuslvl = list([[[None, None] for __ in range(3)] for _ in range(3)])
+                    sele = self.select
+                    sele2 = self.selectlvl
+                    sele3 = self.selectbonus
+                    sele4 = self.selectbonuslvl
+                    self.select = self.craft_result_bag
+                    self.selectlvl = self.craft_result_lvl
+                    self.selectbonus = self.craft_result_bonus
+                    self.selectbonuslvl = self.craft_result_bonuslvl
+                    self.craft_result_bag = sele
+                    self.craft_result_lvl = sele2
+                    self.craft_result_bonus = sele3
+                    self.craft_result_bonuslvl = sele4
+
+        flag = self.craft_bag[0][0]
+        flagb = self.craft_lvl[0][0]
+        flog = 1
+        for ind1, i in enumerate(self.craft_bag):
+            for ind2, j in enumerate(i):
+                if flag != j and flagb != self.craft_bonus[ind1][ind2]:
+                    flog = 0
+        if flag is None: flog = 0
+        if flog:
+            self.craft_result_bag = flag
+            self.craft_result_lvl = flagb + 1
 
 
 def fresh():

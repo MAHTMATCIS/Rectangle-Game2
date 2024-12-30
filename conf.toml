@@ -4,9 +4,10 @@ title="TRgame"
 icontitle="HELLO?"
 icon="icon.png"
 fullscreen=1
-fullsize=[2560,1600]
+fullsize = ['default', 'default']
 noResolution = false                ####
 noWarning = false
+joystick = false#手柄🎮
 
 [test]
 test1=false
@@ -18,7 +19,7 @@ const="const.json"
 FPS = 60
 tick=20
 rectick=60
-randomtickspeed = 1000
+randomtickspeed = 100
 seed="random"
 mousespeed=1
 cameraspeed=50

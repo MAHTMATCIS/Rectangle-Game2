@@ -28,6 +28,7 @@ fullscreen=window['fullscreen']
 noResolution = window['noResolution']
 noWarning = window['noWarning']
 icon=pygame.image.load(window['icon'])
+injoystick = window['joystick']
 fullsize=[None,None]
 full=window['fullsize']
 if full[0]=='default':

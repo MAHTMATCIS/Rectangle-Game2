@@ -8,6 +8,8 @@
 ######################################################################################################################################################################
 import traceback
 
+import joystick
+
 awa = "awa"
 # awa
 qwq = "qwq"
@@ -149,10 +151,11 @@ def getwin(hdc):
 
 class MainWindow:
     def initmouse(self):
-        if self.fullscreen == 0:
-            win32api.SetCursorPos((self.center[0] + self.relcenter[0] + 8, self.center[1] + self.relcenter[1] + 31))
-        else:
-            win32api.SetCursorPos((self.center[0], self.center[1]))
+        if not contact.injoystick:
+            if self.fullscreen == 0:
+                win32api.SetCursorPos((self.center[0] + self.relcenter[0] + 8, self.center[1] + self.relcenter[1] + 31))
+            else:
+                win32api.SetCursorPos((self.center[0], self.center[1]))
 
     def summon(self):
         if self.stopsummon:
@@ -173,6 +176,8 @@ class MainWindow:
 
     def fresh(self):
         posabs = self.posabs
+        if injoystick:
+            pygame.mouse.set_visible(1)
         self.frame += 1
         self.pos.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed)
         self.rerender_image(-self.mouse[0] * contact.mousespeed + posabs[0],
@@ -205,6 +210,8 @@ class MainWindow:
             for i in self.plst:
                 i.power = [0, 0]
         self.mouse = [0, 0]
+        if injoystick:
+            self.joy.update(+400, self.center[1] * 2 - 200)
 
         if test2:
             if self.player.health > 40:
@@ -298,7 +305,7 @@ class MainWindow:
         self.rendere = 0
         self.renderd = 0
         self.rendermap = 0
-        self.debug = 1
+        self.debug = 0
         global win2, renderdistance
         pygame.init()
 
@@ -361,6 +368,7 @@ class MainWindow:
         self.extra = []
         self.pos = Pos()
         self.map = Map()
+        self.joy = joystick.JoyStick(self.surface, self.center[0] + 100, self.center[1] + 100)
         self.bag = Bag(self.surface, 20, self.center[1] * 2 - 100)
         for i in range(10):
             for j in range(10):
@@ -432,6 +440,7 @@ class MainWindow:
                 self.initmouse()
 
             self.fresh()
+            self.mousedown = 0
 
             showFPS(self.clock, self.surface, self.FPS, self.tickclock, self.recvclock)
 
@@ -463,7 +472,7 @@ class MainWindow:
                 elif event.type == pygame.KEYDOWN:
                     print(event.key)
 
-                    if event.key == pygame.K_F11:  # f11
+                    if event.key == pygame.K_F11 or event.key == 102:  # f11 or f
                         self.fullscr()
                     elif event.key == pygame.K_ESCAPE:
                         self.life = 0
@@ -473,9 +482,9 @@ class MainWindow:
                         self.ismove = not self.ismove
                         pygame.mouse.set_visible(self.ismove)
                         self.initmouse()
-                    elif event.key == 1073741883:
+                    elif event.key == 1073741883 and event.key == 120:  # f2 or x
                         self.stopsummon = not self.stopsummon
-                    elif event.key == pygame.K_F1 and self.ticing and self.life:
+                    elif (event.key == pygame.K_F1 or event.key == 122) and self.ticing and self.life:
                         self.pause = not self.pause
                         pygame.mouse.set_visible(self.pause)
                         self.initmouse()
@@ -496,6 +505,13 @@ class MainWindow:
                                 process = multiprocessing.Process(target=setting.Setting)
                                 process.start()
                                 self.settingwindow = process
+
+                    elif event.key == 116:
+                        ch(self.scale)
+                        self.scale *= 1.1
+                    elif event.key == 121:
+                        ch(self.scale)
+                        self.scale /= 1.1
 
                     elif event.key == 101 and self.life and self.ticing:  # e
                         self.pause = not self.pause
@@ -523,8 +539,11 @@ class MainWindow:
                     pygame.mouse.set_visible(self.pause)
                     self.initmouse()
 
+
                 elif event.type == pygame.MOUSEMOTION and self.mousemoving == 0 and self.ismove == 1:
                     pos = event.pos
+                    if injoystick:
+                        self.joy.move(event.pos)
                     if self.ticing == 0 and self.pause == 0:
                         threading.Thread(target=addtick).start()  # about tick
                         threading.Thread(target=addrec).start()  # about tick
@@ -533,7 +552,9 @@ class MainWindow:
                         self.pause = 0
                         self.loading = 0
                     if self.life and not self.pause:
-                        self.move(event)
+                        if not injoystick:
+                            self.move(event)
+
                     else:  #defeat
                         self.posabs = [0, 0]
                         self.mouse = [0, 0]
@@ -543,18 +564,25 @@ class MainWindow:
 
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
+                    self.mousedown = 1
+                    if injoystick and self.mousedown:
+                        self.joy.move(event.pos)
                     ch(self.scale)
                     if self.bagopen:
                         self.bag.click(event)
                     if event.button == 1 and not self.pause and self.life:
                         self.player.type = 1
-                    if event.button == 4:
+
+                    elif event.button == 4:
+                        ch(self.scale)
                         self.scale *= 1.1
-                    if event.button == 5:
+                    elif event.button == 5:
+                        ch(self.scale)
                         self.scale /= 1.1
 
 
                 elif event.type == pygame.MOUSEBUTTONUP:
+                    self.mousedown = 0
                     if event.button == 1 and not self.pause and self.life:
                         self.player.type = 0
 
@@ -595,6 +623,8 @@ class MainWindow:
             self.surface.blit(self.suf2, (0, 0))
             pygame.display.update()
             self.clock.tick(self.FPS)
+            if injoystick:
+                self.movejoystick()
 
     def resize(self, width, height):
         window_width = width
@@ -633,6 +663,9 @@ class MainWindow:
         self.initmouse()
         self.mouse = posabs
         self.mousemoving = 0
+
+    def movejoystick(self):
+        self.mouse = self.joy.upd(self.center[0] + 100, self.center[1] + 100)
 
 
 if __name__ == '__main__':

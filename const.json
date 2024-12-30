@@ -5,7 +5,16 @@
     {"flown": "img/flown.png"},
     {"grass": "img/grass.png"},
     {"else": "img/else.png"},
+    {
+      "joy.back": "img/joyback.png"
+    },
+    {
+      "joy.forge": "img/joyforge.png"
+    },
     {"item.normal": "img/item/normal.png"},
+    {
+      "point": "img/point.png"
+    },
     {
       "item.wide": "img/item/wide.png"
     },
