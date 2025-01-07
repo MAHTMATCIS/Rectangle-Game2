@@ -177,7 +177,7 @@ class Numbers:
 
 
 class Num:
-    def __init__(self, surface, scale, center, num, x, y, typ=0):
+    def __init__(self, surface, scale, center, num, x, y, typ=0, color=(255, 255, 255)):
         self.surface = surface
         self.scale = scale
         self.center = center
@@ -185,14 +185,17 @@ class Num:
         self.x = x
         self.y = y
         self.typ = typ
-        if self.num < 2:
-            self.color = (100, 200, 0)
-        elif self.num < 5:
-            self.color = (100, 100, 0)
-        elif self.num < 20:
-            self.color = (255, 0, 0)
+        if type(num) == int or type(self.num) == float:
+            if self.num < 2:
+                self.color = (100, 200, 0)
+            elif self.num < 5:
+                self.color = (100, 100, 0)
+            elif self.num < 20:
+                self.color = (255, 0, 0)
+            else:
+                self.color = (150, 0, 0)
         else:
-            self.color = (150, 0, 0)
+            self.color = color
         self.time = 20
 
     def islife(self):
@@ -211,7 +214,10 @@ class Num:
         self.y += y
         x = self.x
         y = self.y
-        text = str(-self.num)
+        if type(self.num) == int or type(self.num) == float:
+            text = str(-self.num)
+        else:
+            text = self.num
         size = font.arial.get_rect(text).size[0]
         try:
             font.arial.render_to(self.surface, [int((x - size / 2 - self.center[0]) * self.scale) + self.center[0] + 2,
@@ -294,16 +300,6 @@ class Pond(Entity):
                 try:
                     if self.typ != 'puncture':
                         plst.remove(self)
-                    if self.typ == "phosphor":
-
-                        for j in range(1):
-                            p = Pond(  # phosphor
-                                self.surface, self.x, self.y, typ='phosphor', lvl=1, center=self.self1.center,
-                                scale=self.scale,
-                                type=1, target=self.target
-                            )
-                            p.type = 1
-                            plst.append(p)
                     if self.typ == "lightning":
                         sor = sorted(lst, key=self.distance)
                         for i in range(self.lvl + 2):
@@ -463,7 +459,7 @@ class Player(Entity):
                     p.type = types
                     plst.append(p)
             if typ == 'phosphor':
-                for i in range(5):
+                for i in range(-lvl * 40 + 1, lvl * 3):
                     p = Pond(  # summon phosphor
                         self.surface, self.x, self.y, typ=typ, lvl=lvl, center=self.self1.center, scale=self.scale,
                         type=1, target=ta, anglefix=uniform(0., 6.28), bonus=bonus, bonuslvl=bonuslvl
@@ -517,7 +513,58 @@ class Death(Entity):
 
 
 class Item(Entity):
-    pass
+    def __init__(self, *args, **kwargs):
+        self.itemtype = kwargs['itemtype']
+        del kwargs['itemtype']
+        self.typ = kwargs['typ']
+        del kwargs['typ']
+        self.lvl = kwargs['lvl']
+        del kwargs['lvl']
+        self.IMAGE = None
+        self.lifes = 3000
+        if self.itemtype == 'item':
+            self.IMAGE = image.raw['item.' + self.typ]
+        elif self.itemtype is None:
+            self.IMAGE = image.raw[self.typ]
+        else:
+            self.IMAGE = image.raw['error']
+
+        self.powered = [uniform(-10, 10), uniform(-10, 10)]
+        self.xb: pygame.rect.Rect | None = None
+        super().__init__(*args, **kwargs)
+
+    def update(self, x=0, y=0, scale=1, center=(0, 0), mouse=(0, 0), chima=-1):
+        self.scale = scale
+        self.x += x
+        self.y += y
+        self.center = center
+        if self.typ == 'coin':
+            imag = pygame.transform.scale(self.IMAGE, (60 * self.scale, 60 * self.scale))
+        else:
+            imag = pygame.transform.scale(self.IMAGE, (80 * self.scale, 80 * self.scale))
+        self.xb = self.surface.blit(imag, (
+            (self.x - center[0]) * scale + center[0], (self.y - center[1]) * scale + center[1]))
+
+    def tick(self, player: Player, bag, items, coin):
+        self.lifes -= 1
+        if self.lifes <= 0:
+            items.remove(self)
+            return
+        self.x += self.powered[0]
+        self.y += self.powered[1]
+        self.powered = [self.powered[0] / 1.1, self.powered[1] / 1.1]
+        if self.xb.colliderect(player.self1) and self.typ == 'coin':
+            coin.num += 1
+            items.remove(self)
+            return
+        if self.xb is not None:
+            if self.xb.colliderect(player.self1) and bag.notfull():
+                try:
+                    items.remove(self)
+                    if self.typ != 'coin':
+                        bag.additem(self.typ, self.lvl)
+                except:
+                    pass
 
 
 class Else(Entity):
@@ -570,7 +617,8 @@ class Else(Entity):
         self.bar.x += self.power[0]
         self.bar.y += self.power[1]
 
-    def update(self, x=0, y=0, scale=1, center=(0, 0), lst=None, score=None, numlst=None, dlst=None, diff=None):
+    def update(self, x=0, y=0, scale=1, center=(0, 0), lst=None, score=None, numlst=None, dlst=None, diff=None,
+               items=None):
         super().update(x, y, scale, center, chima=self.size / 50)
         if self.islife():
             try:
@@ -578,9 +626,26 @@ class Else(Entity):
                               self.scale)
                 dlst.append(death)
                 lst.remove(self)
-                score.num += diff.num
             except:
                 pass
+            if items is None: return
+            for i in range(int(diff.num // 10 + 1)):
+                for i in item_info.rawall['raw_item']:
+                    rand = item_info.raw[i]['random']
+                    if uniform(0., 100.) <= rand * 100:
+                        x = Item(self.surface, self.x, self.y, typ=i, lvl=randint(1, int(diff.num)), itemtype='item')
+                        items.append(x)
+                for i in item_info.rawall['bonus_type']:
+                    rand = item_info.bonusInfo[i]['random']
+                    if uniform(0., 100.) <= rand * 100:
+                        x = Item(self.surface, self.x, self.y, typ=i, lvl=randint(1, int(diff.num)), itemtype='item')
+                        items.append(x)
+                for i in range(int(diff.num)):
+                    i = 'coin'
+                    rand = 0.5
+                    if uniform(0., 100.) <= rand * 100:
+                        x = Item(self.surface, self.x, self.y, typ=i, lvl=1, itemtype=None)
+                        items.append(x)
 
 
 class Bar:

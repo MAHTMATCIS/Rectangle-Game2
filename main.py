@@ -6,6 +6,7 @@
 # |  | |\    / /|  | |   /  /____\  \ \  |  ⌈¯⌈¯¯|  | |      |  | |      |  | |\    / /|  | |  /  /____\  \ \       |  | |       \  \ \____._.  |  | |    _____  | | #
 # |__|_| \__/_/ |__|_|  /__/_/    \__\_\ |__|_|  |__|_|      ⌊__⌋_⌋      |__|_| \__/_/ |__|_| /__/_/    \__\_\      ⌊__⌋_⌋         \_______|_|  |__|_|   |______/_/  #
 ######################################################################################################################################################################
+import json
 import traceback
 
 import joystick
@@ -57,6 +58,7 @@ from map import *
 from items import *
 from pygame.display import get_active
 import random
+import items
 
 proc.config(value=2)
 win2.update()
@@ -191,10 +193,14 @@ class MainWindow:
         for i in self.dlst:
             i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
                      self.scale, self.center)
+
+        for i in self.items:
+            i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
+                     self.scale, self.center)
         for i in self.elst:
             i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
                      scale=self.scale, center=self.center, lst=self.elst, score=score, numlst=self.nlst, dlst=self.dlst,
-                     diff=difficult)
+                     diff=difficult, items=self.items)
         for i in self.nlst:
             i.update(-self.mouse[0] * contact.mousespeed + posabs[0], posabs[1] - self.mouse[1] * contact.mousespeed,
                      self.scale, self.center)
@@ -212,7 +218,7 @@ class MainWindow:
         self.mouse = [0, 0]
         if injoystick:
             self.joy.update(+400, self.center[1] * 2 - 200)
-
+        ##################################################################
         if test2:
             if self.player.health > 40:
                 ramp = 40
@@ -280,6 +286,9 @@ class MainWindow:
             i.tick()
         self.renderi = (time.time() - t)
 
+        for i in self.items:
+            i.tick(self.player, self.bag, self.items, score)
+
         if self.player.islife():
             self.life = 0
             return
@@ -297,7 +306,52 @@ class MainWindow:
         for i in self.plst:
             i.recv()
 
+    def read(self):
+        try:
+            with open(self.savefile) as f:
+                global seed
+                worldinfo = json.load(f)
+                self.bag.bag = worldinfo['self.bag.bag']
+                self.bag.bonus = worldinfo['self.bag.bonus']
+                self.bag.lvl = worldinfo['self.bag.lvl']
+                self.bag.bonuslvl = worldinfo['self.bag.bonuslvl']
+                items.items = worldinfo['items.items']
+                items.lvl = worldinfo['items.lvl']
+                items.bonus = worldinfo['items.bonus']
+                items.bonuslvl = worldinfo['items.bonuslvl']
+                difficult.num = worldinfo['difficult']
+                seed = worldinfo['seed']
+                score.num = worldinfo['score']
+                self.player.health = worldinfo['self.player.health']
+                self.player.max_health = worldinfo['self.player.max_health']
+        except:
+            pass
+
+    def save(self):
+        with open(self.savefile, 'w') as f:
+            worldinfo = {}
+            worldinfo['self.bag.bag'] = self.bag.bag
+            worldinfo['self.bag.bonus'] = self.bag.bonus
+            worldinfo['self.bag.lvl'] = self.bag.lvl
+            worldinfo['self.bag.bonuslvl'] = self.bag.bonuslvl
+            worldinfo['items.items'] = items.items
+            worldinfo['items.lvl'] = items.lvl
+            worldinfo['items.bonus'] = items.bonus
+            worldinfo['items.bonuslvl'] = items.bonuslvl
+            worldinfo['difficult'] = difficult.num
+            worldinfo['seed'] = seed
+            worldinfo['score'] = score.num
+            if self.player.health <= 0:
+                worldinfo['self.player.health'] = self.player.max_health
+            else:
+                worldinfo['self.player.health'] = self.player.health
+            worldinfo['self.player.max_health'] = self.player.max_health
+            json.dump(worldinfo, f, check_circular=1)
+
+
+
     def __init__(self):
+        self.savefile = 'save.RGworld'
         self.renderi = 0
         self.renderextra = 0
         self.renderp = 0
@@ -306,7 +360,7 @@ class MainWindow:
         self.renderd = 0
         self.rendermap = 0
         self.debug = 0
-        global win2, renderdistance
+        global win2, renderdistance, randomtickspeed
         pygame.init()
 
         proc.config(value=4)
@@ -366,6 +420,7 @@ class MainWindow:
         self.ilst = []
         self.dlst = []
         self.extra = []
+        self.items = []
         self.pos = Pos()
         self.map = Map()
         self.joy = joystick.JoyStick(self.surface, self.center[0] + 100, self.center[1] + 100)
@@ -429,6 +484,8 @@ class MainWindow:
         self.alp = 0
         self.bagopen = 0
 
+        self.read()
+
         while True:
             self.surface.fill(contact.bg)
             if self.alpha >= 0:
@@ -444,9 +501,10 @@ class MainWindow:
 
             showFPS(self.clock, self.surface, self.FPS, self.tickclock, self.recvclock)
 
-            arial.render_to(self.surface, (5, 65), 'score:' + str(score), (0, 0, 0))
-            arial.render_to(self.surface, (5, 85), 'difficult:' + str(difficult), (0, 0, 0))
-            arial.render_to(self.surface, (5, 105),
+            arial.render_to(self.surface, (5, 65), 'Coin:' + str(score), (0, 0, 0))
+            arial.render_to(self.surface, (5, 85), 'Difficult:' + str(difficult), (0, 0, 0))
+            arial.render_to(self.surface, (5, 105), 'Spawning Speed:' + str(contact.randomtickspeed), (0, 0, 0))
+            arial.render_to(self.surface, (5, 125),
                             'x,y:' + str(self.pos.x.__round__(3)) + ',' + str(self.pos.y.__round__(3)), (0, 0, 0))
             if self.debug:
                 arial.render_to(self.surface, (5, 125), '---DEBUG OPEN---', (0, 0, 0))
@@ -476,26 +534,28 @@ class MainWindow:
                         self.fullscr()
                     elif event.key == pygame.K_ESCAPE:
                         self.life = 0
+                        self.save()
                         pygame.quit()
                         sys.exit(-1)
                     elif event.key == 1073742050:
                         self.ismove = not self.ismove
                         pygame.mouse.set_visible(self.ismove)
                         self.initmouse()
-                    elif event.key == 1073741883 and event.key == 120:  # f2 or x
+                    elif event.key == pygame.K_F2 or event.key == 120:  # f2 or x
                         self.stopsummon = not self.stopsummon
                     elif (event.key == pygame.K_F1 or event.key == 122) and self.ticing and self.life:
                         self.pause = not self.pause
                         pygame.mouse.set_visible(self.pause)
                         self.initmouse()
+                        self.player.type = 0
 
                     elif event.key == 113 and not self.pause and self.life:  # q
-                        if score.num >= 1:
-                            score.num -= 1
+                        if score.num >= 100:
+                            score.num -= 100
                             self.player.addF1()
                     elif event.key == 119 and not self.pause and self.life:  # w
-                        if score.num >= 3:
-                            score.num -= 3
+                        if score.num >= 1000:
+                            score.num -= 1000
                             self.player.addF2()
 
                     elif event.key == 115 and not self.pause and self.life:  # s
@@ -513,9 +573,51 @@ class MainWindow:
                         ch(self.scale)
                         self.scale /= 1.1
 
+                    elif event.key == 113 and self.bagopen:  # q
+                        self.bag.q(pygame.mouse.get_pos())
+
+                    elif event.key == 105:  # i
+                        difficult.num -= 0.5
+                        difficult.num = round(difficult.num, 2)
+                    elif event.key == 107:  # k
+                        difficult.num += 0.5
+                        difficult.num = round(difficult.num, 2)
+
+                    elif event.key == 111:  # o
+                        randomtickspeed -= 0.1
+                    elif event.key == 108:  # l
+                        randomtickspeed += 0.1
+
+                    elif event.key == 106:  # j
+                        if score.num >= 5000:
+                            score.num -= 5000
+                            self.player.health += 50
+                            self.player.max_health += 50
+
+                    elif event.key == 99:  # c
+                        self.items.clear()
+                    elif event.key == 100:  # d
+                        for i in self.items:
+                            i: Item
+                            x1, y1 = self.player.self1.center
+                            x2, y2 = i.x, i.y
+
+                            x = (x2 - x1)
+                            y = (y2 - y1)
+                            z = math.sqrt(x ** 2 + y ** 2)
+
+                            angle = (math.asin(y / z))
+                            if contact.test1:
+                                angle = uniform(0, 6.28)
+                            speed = [math.cos(angle) * 20, -math.sin(angle) * 20]
+                            if x2 >= x1:
+                                speed[0] = -speed[0]
+                            i.powered = speed
+
                     elif event.key == 101 and self.life and self.ticing:  # e
                         self.pause = not self.pause
                         self.bagopen = not self.bagopen
+                        self.player.type = 0
                         if self.bagopen:
                             self.pause = 1
                         pygame.mouse.set_visible(self.pause)

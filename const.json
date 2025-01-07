@@ -13,6 +13,12 @@
     },
     {"item.normal": "img/item/normal.png"},
     {
+      "coin": "img/coin.png"
+    },
+    {
+      "error": "img/error.png"
+    },
+    {
       "point": "img/point.png"
     },
     {
@@ -33,6 +39,13 @@
     {
       "item.none": "img/weapon/none.png"
     }
+  ],
+  "raw_item": [
+    "normal",
+    "wide",
+    "puncture",
+    "phosphor",
+    "lightning"
   ],
   "item_type": [
     "normal",
@@ -58,7 +71,8 @@
       ],
       "damage": "self.lvl-1",
       "sp": 6,
-      "timesleep": "0.1"
+      "timesleep": "0.1",
+      "random": 0.13
     },
     "wide": {
       "size": 40,
@@ -69,35 +83,46 @@
       ],
       "damage": "self.lvl*2",
       "sp": 3,
-      "timesleep": "10//lvl[ind]"
+      "timesleep": "10//lvl[ind]",
+      "random": 0.1
     },
     "puncture": {
       "size": 20,
       "forge": "#99D9EA",
       "damage": "self.lvl*2",
       "sp": 5,
-      "timesleep": "10//(lvl[ind]/2)"
+      "timesleep": "10//(lvl[ind]/2)",
+      "random": 0.05
     },
     "phosphor": {
       "size": 25,
       "forge": "#DFFF26",
-      "damage": "self.lvl*2",
-      "sp": 2,
-      "timesleep": "30//(lvl[ind]/2)"
+      "damage": "self.lvl*5",
+      "sp": 0.2,
+      "timesleep": "30//(lvl[ind]/2)",
+      "random": 0.02
     },
     "lightning": {
       "size": 30,
       "forge": "#73FBFD",
       "damage": "self.lvl*2",
       "sp": 5,
-      "timesleep": "20//(lvl[ind]*2)"
+      "timesleep": "20//(lvl[ind]*2)",
+      "random": 0.01
     }
   },
   "bonus.info": {
     "healthPoint": {
       "health": "0",
       "damage": "self.bonuslvl[index]",
-      "timesleep": "0"
+      "timesleep": "0",
+      "random": 0.01
+    },
+    "instantHealth": {
+      "health": "self.bonuslvl[index]",
+      "damage": "0",
+      "timesleep": "0",
+      "random": 0.01
     }
   }
 }

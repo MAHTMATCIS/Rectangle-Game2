@@ -1,0 +1,142 @@
+[
+  {
+    "from": [
+      [
+        "normal",
+        "normal",
+        null
+      ],
+      [
+        "normal",
+        "normal",
+        null
+      ],
+      [
+        null,
+        null,
+        null
+      ]
+    ],
+    "to": "wide"
+  },
+  {
+    "from": [
+      [
+        null,
+        "normal",
+        "normal"
+      ],
+      [
+        null,
+        "normal",
+        "normal"
+      ],
+      [
+        null,
+        null,
+        null
+      ]
+    ],
+    "to": "wide"
+  },
+  {
+    "from": [
+      [
+        null,
+        null,
+        null
+      ],
+      [
+        "normal",
+        "normal",
+        null
+      ],
+      [
+        "normal",
+        "normal",
+        null
+      ]
+    ],
+    "to": "wide"
+  },
+  {
+    "from": [
+      [
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        "normal",
+        "normal"
+      ],
+      [
+        null,
+        "normal",
+        "normal"
+      ]
+    ],
+    "to": "wide"
+  },
+  {
+    "from": [
+      [
+        "normal",
+        "normal",
+        "normal"
+      ],
+      [
+        null,
+        "normal",
+        "normal"
+      ],
+      [
+        "normal",
+        null,
+        "normal"
+      ]
+    ],
+    "to": "puncture"
+  },
+  {
+    "from": [
+      [
+        "wide",
+        "wide",
+        "wide"
+      ],
+      [
+        "wide",
+        "normal",
+        "wide"
+      ],
+      [
+        "wide",
+        "wide",
+        "wide"
+      ]
+    ],
+    "to": "phosphor"
+  },
+  {
+    "from": [
+      [
+        "wide",
+        "wide",
+        "wide"
+      ],
+      [
+        "wide",
+        "puncture",
+        "wide"
+      ],
+      [
+        "wide",
+        "wide",
+        "wide"
+      ]
+    ],
+    "to": "phosphor"
+  }
+]

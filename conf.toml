@@ -4,10 +4,10 @@ title="TRgame"
 icontitle="HELLO?"
 icon="icon.png"
 fullscreen=1
-fullsize = ['default', 'default']
-noResolution = false                ####
-noWarning = false
-joystick = false#手柄🎮
+fullsize = [2560, 1600]
+noResolution = 0                ####
+noWarning = 0
+joystick = false#🎮
 
 [test]
 test1=false
@@ -19,10 +19,10 @@ const="const.json"
 FPS = 60
 tick=20
 rectick=60
-randomtickspeed = 100
+randomtickspeed = 3000
 seed="random"
-mousespeed=1
-cameraspeed=50
+mousespeed = 2
+cameraspeed = 20
 holval=1.2
 bg=[150,220,150]
 vsync=1
@@ -37,9 +37,9 @@ renderdistance=2000
 renderdistancetoscreen=false
 
 [message]
-deathmessage="你失败了！"
-pausemessage="游戏暂停！"
-waitmessage="移动鼠标开始游戏！"
+deathmessage = "You are DIED!"
+pausemessage = "PAUSE!"
+waitmessage = "Move Mouse?"
 
 [senior]
-blocksize=512  # 区块大小
+blocksize = 512  # chunksize

@@ -34,6 +34,7 @@ for i in rawall['item_type']:
 
 class Bag:
     def __init__(self, surface, sizex, sizey):
+        self.center = (0, 0)
         self.point = image.raw['point']
         self.surface: pygame.Surface = surface
         self.sizex = sizex
@@ -62,24 +63,32 @@ class Bag:
         self.craft_result_bonus = [None, None]
         self.craft_result_bonuslvl = [None, None]
 
+        self.upgrade_bag = None
+        self.upgrade_lvl = None
+        self.upgrade_blocks = None
+        self.upgrade_bonus = [None, None]
+        self.upgrade_bonuslvl = [None, None]
 
-        self.additem('lightning', 6, ['healthPoint', 'healthPoint'], [10, 10])
-        self.additem('lightning', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('lightning', 6)
-        self.additem('lightning', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('lightning', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('wide', 6)
-        self.additem('wide', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('phosphor', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('puncture', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('lightning', 6)
-        self.additem('puncture', 6)
-        self.additem('normal', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('normal', 6, ['healthPoint', 'healthPoint'], [1, 1])
-        self.additem('wide', 6)
-        self.additem('healthPoint', 6)
-        self.additem('normal', 1)
-        self.additem('normal', 1)
+        self.upgrade_slot1_bag = None
+        self.upgrade_slot1_lvl = None
+        self.upgrade_slot1_blocks = None
+        self.upgrade_slot1_bonus = [None, None]
+        self.upgrade_slot1_bonuslvl = [None, None]
+
+        self.upgrade_slot2_bag = None
+        self.upgrade_slot2_lvl = None
+        self.upgrade_slot2_blocks = None
+        self.upgrade_slot2_bonus = [None, None]
+        self.upgrade_slot2_bonuslvl = [None, None]
+
+        self.upgrade_result_bag = None
+        self.upgrade_result_lvl = None
+        self.upgrade_result_blocks = None
+        self.upgrade_result_bonus = [None, None]
+        self.upgrade_result_bonuslvl = [None, None]
+
+        self.additem('lightning', 2, ['healthPoint', 'healthPoint'], [10, 10])
+        self.additem('lightning', 2, ['healthPoint', 'healthPoint'], [10, 10])
 
     def additem(self, types, lvls, bonuses=None, bonuslvls=None):
         if bonuses is None:
@@ -98,18 +107,18 @@ class Bag:
     def update(self, ind, tick, player, elst, plst, indx):
 
         ind %= len(items)
-        x = font.normal.render('Weapon(武器): ' + str(weapon), 1, 'black')
+        x = font.normal.render('Weapon: ' + str(weapon), 1, 'black')
         self.surface.blit(x, (self.sizex + 2, self.sizey - 153))
-        x = font.normal.render('Weapon(武器): ' + str(weapon), 1, 'white')
+        x = font.normal.render('Weapon: ' + str(weapon), 1, 'white')
         self.surface.blit(x, (self.sizex, self.sizey - 155))
         pygame.draw.rect(self.surface, 'black', ((self.sizex - 8, self.sizey - 118), (70, 70)), 3, 10)
         pygame.draw.rect(self.surface, 'white', ((self.sizex - 10, self.sizey - 120), (70, 70)), 3, 10)
         if weapon is not None:
             self.surface.blit(weapondict[weapon], (self.sizex, self.sizey - 110))
 
-        x = font.normal.render('Items(物品栏): ' + str(lvl[ind]) + ' ' + str(items[ind]), 1, 'black')
+        x = font.normal.render('Items: ' + str(lvl[ind]) + ' ' + str(items[ind]), 1, 'black')
         self.surface.blit(x, (self.sizex + 2, self.sizey - 43))
-        x = font.normal.render('Items(物品栏): ' + str(lvl[ind]) + ' ' + str(items[ind]), 1, 'white')
+        x = font.normal.render('Items: ' + str(lvl[ind]) + ' ' + str(items[ind]), 1, 'white')
         self.surface.blit(x, (self.sizex, self.sizey - 45))
         pygame.draw.rect(self.surface, 'black', ((self.sizex - 8, self.sizey - 8), (60 * len(items) + 10, 70)), 3, 10)
         pygame.draw.rect(self.surface, 'white', ((self.sizex - 10, self.sizey - 10), (60 * len(items) + 10, 70)), 3, 10)
@@ -177,6 +186,7 @@ class Bag:
                     self.surface.blit(x2, (pos[0] - 25 + 25, pos[1] - 25 + indexx * 20))
 
     def background(self, center):
+        self.center = center
         surf = Surface((center[0] * 2, center[1] * 2))
         surf.fill('black')
         surf.set_alpha(80)
@@ -185,10 +195,10 @@ class Bag:
         height = center[1] * 2 - 200
         minim = min(weight, height)
 
-        f = font.chin.size('MY BAG 我的背包')[0]
-        x = font.chin.render('MY BAG 我的背包', True, (255, 0, 255))
-        x3 = font.chin.render('MY BAG 我的背包', True, (255, 255, 0))
-        x2 = font.chin.render('MY BAG 我的背包', True, (255, 255, 255))
+        f = font.chin.size('MY BAG')[0]
+        x = font.chin.render('MY BAG', True, (255, 0, 255))
+        x3 = font.chin.render('MY BAG', True, (255, 255, 0))
+        x2 = font.chin.render('MY BAG', True, (255, 255, 255))
         self.surface.blit(x, (center[0] + 4 - f // 2, 50 + 4))
         self.surface.blit(x3, (center[0] + 2 - f // 2, 50 + 2))
         self.surface.blit(x2, (center[0] - f // 2, 50))
@@ -276,14 +286,14 @@ class Bag:
                             x2 = font.small.render(str(self.craft_bonuslvl[indexi][indexj][indexx]), True,
                                                    (255, 255, 255))
                             self.surface.blit(x1, (
-                            minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
-                            minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+                                minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                                minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
                             self.surface.blit(x, (
-                            minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + 2 + minim // 7 * 6,
-                            minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2 + 2))
+                                minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + 2 + minim // 7 * 6,
+                                minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2 + 2))
                             self.surface.blit(x2, (
-                            minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
-                            minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+                                minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                                minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
 
                 pygame.draw.rect(self.surface, 'black', (
                     (minim // 7 * indexi + 120 + 2 + minim // 7 * 6, minim // 7 * indexj + 120 + 2),
@@ -341,6 +351,187 @@ class Bag:
             (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120),
             (minim // 7 - 5, minim // 7 - 5)), 3, 10)
         self.craft_result_blocks = x
+
+        item2 = self.upgrade_result_bag
+        indexi = 4;
+        indexj = 4
+        if item2 is None:
+            pass
+        else:
+            x = font.small.render(str(self.upgrade_result_lvl), True, (0, 0, 0))
+            x2 = font.small.render(str(self.upgrade_result_lvl), True, (255, 255, 255))
+            item = pygame.transform.scale(itemdict[item2], ((minim // 7 - 5), (minim // 7 - 5)))
+            self.surface.blit(item, (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120))
+            self.surface.blit(x,
+                              (minim // 7 * indexi + 120 + 10 + minim // 7 * 6, minim // 7 * indexj + 120 + 10))
+            self.surface.blit(x2,
+                              (minim // 7 * indexi + 120 + 8 + minim // 7 * 6, minim // 7 * indexj + 120 + 8))
+
+            for indexx, ix in enumerate(self.upgrade_result_bonus):
+                if ix is not None:
+                    x1 = itemdict[ix]
+                    x1 = pygame.transform.scale(x1, ((minim // 7 - 5) / 5 * 2, (minim // 7 - 5) / 5 * 2))
+                    x = font.small.render(str(self.upgrade_result_bonuslvl[indexx]), True, (0, 0, 0))
+                    x2 = font.small.render(str(self.upgrade_result_bonuslvl[indexx]), True,
+                                           (255, 255, 255))
+                    self.surface.blit(x1, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+                    self.surface.blit(x, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + 2 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2 + 2))
+                    self.surface.blit(x2, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+
+        pygame.draw.rect(self.surface, 'black', (
+            (minim // 7 * indexi + 120 + 2 + minim // 7 * 6, minim // 7 * indexj + 120 + 2),
+            (minim // 7 - 5, minim // 7 - 5)),
+                         3,
+                         10)
+        x = pygame.draw.rect(self.surface, 'white', (
+            (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120),
+            (minim // 7 - 5, minim // 7 - 5)), 3, 10)
+        self.upgrade_result_blocks = x
+
+        indexi = 3;
+        indexj = 4
+        point = pygame.transform.scale(self.point, ((minim // 7 - 5), (minim // 7 - 5)))
+        self.surface.blit(point, (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120))
+
+        item2 = self.upgrade_slot1_bag
+        indexi = 2;
+        indexj = 4
+        if item2 is None:
+            pass
+        else:
+            x = font.small.render(str(self.upgrade_slot1_lvl), True, (0, 0, 0))
+            x2 = font.small.render(str(self.upgrade_slot1_lvl), True, (255, 255, 255))
+            item = pygame.transform.scale(itemdict[item2], ((minim // 7 - 5), (minim // 7 - 5)))
+            self.surface.blit(item, (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120))
+            self.surface.blit(x,
+                              (minim // 7 * indexi + 120 + 10 + minim // 7 * 6, minim // 7 * indexj + 120 + 10))
+            self.surface.blit(x2,
+                              (minim // 7 * indexi + 120 + 8 + minim // 7 * 6, minim // 7 * indexj + 120 + 8))
+
+            for indexx, ix in enumerate(self.upgrade_slot1_bonus):
+                if ix is not None:
+                    x1 = itemdict[ix]
+                    x1 = pygame.transform.scale(x1, ((minim // 7 - 5) / 5 * 2, (minim // 7 - 5) / 5 * 2))
+                    x = font.small.render(str(self.upgrade_slot1_bonuslvl[indexx]), True, (0, 0, 0))
+                    x2 = font.small.render(str(self.upgrade_slot1_bonuslvl[indexx]), True,
+                                           (255, 255, 255))
+                    self.surface.blit(x1, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+                    self.surface.blit(x, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + 2 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2 + 2))
+                    self.surface.blit(x2, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+
+        pygame.draw.rect(self.surface, 'black', (
+            (minim // 7 * indexi + 120 + 2 + minim // 7 * 6, minim // 7 * indexj + 120 + 2),
+            (minim // 7 - 5, minim // 7 - 5)),
+                         3,
+                         10)
+        x = pygame.draw.rect(self.surface, 'white', (
+            (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120),
+            (minim // 7 - 5, minim // 7 - 5)), 3, 10)
+        self.upgrade_slot1_blocks = x
+        ###############
+        item2 = self.upgrade_slot2_bag
+        indexi = 2;
+        indexj = 5
+        if item2 is None:
+            pass
+        else:
+            x = font.small.render(str(self.upgrade_slot2_lvl), True, (0, 0, 0))
+            x2 = font.small.render(str(self.upgrade_slot2_lvl), True, (255, 255, 255))
+            item = pygame.transform.scale(itemdict[item2], ((minim // 7 - 5), (minim // 7 - 5)))
+            self.surface.blit(item, (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120))
+            self.surface.blit(x,
+                              (minim // 7 * indexi + 120 + 10 + minim // 7 * 6, minim // 7 * indexj + 120 + 10))
+            self.surface.blit(x2,
+                              (minim // 7 * indexi + 120 + 8 + minim // 7 * 6, minim // 7 * indexj + 120 + 8))
+
+            for indexx, ix in enumerate(self.upgrade_slot2_bonus):
+                if ix is not None:
+                    x1 = itemdict[ix]
+                    x1 = pygame.transform.scale(x1, ((minim // 7 - 5) / 5 * 2, (minim // 7 - 5) / 5 * 2))
+                    x = font.small.render(str(self.upgrade_slot2_bonuslvl[indexx]), True, (0, 0, 0))
+                    x2 = font.small.render(str(self.upgrade_slot2_bonuslvl[indexx]), True,
+                                           (255, 255, 255))
+                    self.surface.blit(x1, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+                    self.surface.blit(x, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + 2 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2 + 2))
+                    self.surface.blit(x2, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+
+        pygame.draw.rect(self.surface, 'black', (
+            (minim // 7 * indexi + 120 + 2 + minim // 7 * 6, minim // 7 * indexj + 120 + 2),
+            (minim // 7 - 5, minim // 7 - 5)),
+                         3,
+                         10)
+        x = pygame.draw.rect(self.surface, 'white', (
+            (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120),
+            (minim // 7 - 5, minim // 7 - 5)), 3, 10)
+        self.upgrade_slot2_blocks = x
+        ###############
+        item2 = self.upgrade_bag
+        indexi = 1;
+        indexj = 4
+        if item2 is None:
+            pass
+        else:
+            x = font.small.render(str(self.upgrade_lvl), True, (0, 0, 0))
+            x2 = font.small.render(str(self.upgrade_lvl), True, (255, 255, 255))
+            item = pygame.transform.scale(itemdict[item2], ((minim // 7 - 5), (minim // 7 - 5)))
+            self.surface.blit(item, (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120))
+            self.surface.blit(x,
+                              (minim // 7 * indexi + 120 + 10 + minim // 7 * 6, minim // 7 * indexj + 120 + 10))
+            self.surface.blit(x2,
+                              (minim // 7 * indexi + 120 + 8 + minim // 7 * 6, minim // 7 * indexj + 120 + 8))
+
+            for indexx, ix in enumerate(self.upgrade_bonus):
+                if ix is not None:
+                    x1 = itemdict[ix]
+                    x1 = pygame.transform.scale(x1, ((minim // 7 - 5) / 5 * 2, (minim // 7 - 5) / 5 * 2))
+                    x = font.small.render(str(self.upgrade_bonuslvl[indexx]), True, (0, 0, 0))
+                    x2 = font.small.render(str(self.upgrade_bonuslvl[indexx]), True,
+                                           (255, 255, 255))
+                    self.surface.blit(x1, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+                    self.surface.blit(x, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + 2 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2 + 2))
+                    self.surface.blit(x2, (
+                        minim // 7 * indexi + 120 + (minim // 7 - 5) / 5 * 2 + 5 + minim // 7 * 6,
+                        minim // 7 * indexj + 120 + indexx * (minim // 7 - 5) / 5 * 2))
+
+        pygame.draw.rect(self.surface, 'black', (
+            (minim // 7 * indexi + 120 + 2 + minim // 7 * 6, minim // 7 * indexj + 120 + 2),
+            (minim // 7 - 5, minim // 7 - 5)),
+                         3,
+                         10)
+        x = pygame.draw.rect(self.surface, 'white', (
+            (minim // 7 * indexi + 120 + minim // 7 * 6, minim // 7 * indexj + 120),
+            (minim // 7 - 5, minim // 7 - 5)), 3, 10)
+        self.upgrade_blocks = x
+
+    def notfull(self):
+        flag = 0
+        for i in self.bag:
+            for j in i:
+                if j is None:
+                    flag = 1
+        return flag
 
     def click(self, event: pygame.event.Event):
 
@@ -414,18 +605,142 @@ class Bag:
                     self.craft_result_lvl = sele2
                     self.craft_result_bonus = sele3
                     self.craft_result_bonuslvl = sele4
+            item2 = self.upgrade_result_blocks
+            if type(item2) == pygame.rect.Rect:
+                if item2.collidepoint(pos) and self.select is None:
+                    self.upgrade_bag = None
+                    self.upgrade_lvl = None
+                    self.upgrade_blocks = None
+                    self.upgrade_bonus = [None, None]
+                    self.upgrade_bonuslvl = [None, None]
+
+                    self.upgrade_slot1_bag = None
+                    self.upgrade_slot1_lvl = None
+                    self.upgrade_slot1_blocks = None
+                    self.upgrade_slot1_bonus = [None, None]
+                    self.upgrade_slot1_bonuslvl = [None, None]
+
+                    self.upgrade_slot2_bag = None
+                    self.upgrade_slot2_lvl = None
+                    self.upgrade_slot2_blocks = None
+                    self.upgrade_slot2_bonus = [None, None]
+                    self.upgrade_slot2_bonuslvl = [None, None]
+                    sele = self.select
+                    sele2 = self.selectlvl
+                    sele3 = self.selectbonus
+                    sele4 = self.selectbonuslvl
+                    self.select = self.upgrade_result_bag
+                    self.selectlvl = self.upgrade_result_lvl
+                    self.selectbonus = self.upgrade_result_bonus
+                    self.selectbonuslvl = self.upgrade_result_bonuslvl
+                    self.upgrade_result_bag = sele
+                    self.upgrade_result_lvl = sele2
+                    self.upgrade_result_bonus = sele3
+                    self.upgrade_result_bonuslvl = sele4
+            item2 = self.upgrade_slot1_blocks
+            if type(item2) == pygame.rect.Rect:
+                if item2.collidepoint(pos) and (self.select in item_info.rawall['bonus_type'] or self.select is None):
+                    sele = self.select
+                    sele2 = self.selectlvl
+                    sele3 = self.selectbonus
+                    sele4 = self.selectbonuslvl
+                    self.select = self.upgrade_slot1_bag
+                    self.selectlvl = self.upgrade_slot1_lvl
+                    self.selectbonus = self.upgrade_slot1_bonus
+                    self.selectbonuslvl = self.upgrade_slot1_bonuslvl
+                    self.upgrade_slot1_bag = sele
+                    self.upgrade_slot1_lvl = sele2
+                    self.upgrade_slot1_bonus = sele3
+                    self.upgrade_slot1_bonuslvl = sele4
+            item2 = self.upgrade_slot2_blocks
+            if type(item2) == pygame.rect.Rect:
+                if item2.collidepoint(pos) and (self.select in item_info.rawall['bonus_type'] or self.select is None):
+                    sele = self.select
+                    sele2 = self.selectlvl
+                    sele3 = self.selectbonus
+                    sele4 = self.selectbonuslvl
+                    self.select = self.upgrade_slot2_bag
+                    self.selectlvl = self.upgrade_slot2_lvl
+                    self.selectbonus = self.upgrade_slot2_bonus
+                    self.selectbonuslvl = self.upgrade_slot2_bonuslvl
+                    self.upgrade_slot2_bag = sele
+                    self.upgrade_slot2_lvl = sele2
+                    self.upgrade_slot2_bonus = sele3
+                    self.upgrade_slot2_bonuslvl = sele4
+            item2 = self.upgrade_blocks
+            if type(item2) == pygame.rect.Rect:
+                if item2.collidepoint(pos):
+                    sele = self.select
+                    sele2 = self.selectlvl
+                    sele3 = self.selectbonus
+                    sele4 = self.selectbonuslvl
+                    self.select = self.upgrade_bag
+                    self.selectlvl = self.upgrade_lvl
+                    self.selectbonus = self.upgrade_bonus
+                    self.selectbonuslvl = self.upgrade_bonuslvl
+                    self.upgrade_bag = sele
+                    self.upgrade_lvl = sele2
+                    self.upgrade_bonus = sele3
+                    self.upgrade_bonuslvl = sele4
 
         flag = self.craft_bag[0][0]
         flagb = self.craft_lvl[0][0]
         flog = 1
         for ind1, i in enumerate(self.craft_bag):
             for ind2, j in enumerate(i):
-                if flag != j and flagb != self.craft_bonus[ind1][ind2]:
+                if flag != j or flagb != self.craft_lvl[ind1][ind2]:
                     flog = 0
         if flag is None: flog = 0
         if flog:
             self.craft_result_bag = flag
             self.craft_result_lvl = flagb + 1
+
+        self.upgrade_result_bag = self.upgrade_bag
+        self.upgrade_result_lvl = self.upgrade_lvl
+        slot1 = self.upgrade_slot1_bag
+        slot2 = self.upgrade_slot2_bag
+        if slot1 is not None:
+            self.upgrade_result_bonus[0] = slot1
+            self.upgrade_result_bonuslvl[0] = self.upgrade_slot1_lvl
+        else:
+            self.upgrade_result_bonus[0] = self.upgrade_bonus[0]
+            self.upgrade_result_bonuslvl[0] = self.upgrade_bonuslvl[0]
+        if slot2 is not None:
+            self.upgrade_result_bonus[1] = slot2
+            self.upgrade_result_bonuslvl[1] = self.upgrade_slot2_lvl
+        else:
+            self.upgrade_result_bonus[1] = self.upgrade_bonus[1]
+            self.upgrade_result_bonuslvl[1] = self.upgrade_bonuslvl[1]
+
+    def q(self, pos):
+        print('qqqqqqqqq')
+        sele = None
+        sele2 = None
+        sele3 = None
+        sele4 = None
+        for indexi, item1 in enumerate(self.blocks):
+            for indexj, item2 in enumerate(item1):
+                if type(item2) == pygame.rect.Rect:
+                    if item2.collidepoint(pos):
+                        self.bag[indexi][indexj] = sele
+                        self.lvl[indexi][indexj] = sele2
+                        self.bonus[indexi][indexj] = sele3
+                        self.bonuslvl[indexi][indexj] = sele4
+        for indexi, item2 in enumerate(self.itemblocks):
+            if type(item2) == pygame.rect.Rect:
+                if item2.collidepoint(pos) and self.select not in rawall['bonus_type']:
+                    items[indexi] = sele
+                    lvl[indexi] = sele2
+                    bonus[indexi] = sele3
+                    bonuslvl[indexi] = sele4
+        for indexi, item1 in enumerate(self.craft_blocks):
+            for indexj, item2 in enumerate(item1):
+                if type(item2) == pygame.rect.Rect:
+                    if item2.collidepoint(pos):
+                        self.craft_bag[indexi][indexj] = sele
+                        self.craft_lvl[indexi][indexj] = sele2
+                        self.craft_bonus[indexi][indexj] = sele3
+                        self.craft_bonuslvl[indexi][indexj] = sele4
 
 
 def fresh():
