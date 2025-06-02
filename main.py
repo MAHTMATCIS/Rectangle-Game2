@@ -11,15 +11,6 @@ import traceback
 
 import joystick
 
-awa = "awa"
-# awa
-qwq = "qwq"
-# qwq
-errorNumber1 = 114514
-# 114514
-errorNumber2 = 1919810
-# 1919810
-errorNumber = errorNumber1 | errorNumber2
 
 import sys
 from math import *
@@ -29,11 +20,19 @@ import ctypes
 import contact
 
 user32 = ctypes.windll.user32
+Shcore = ctypes.windll.Shcore
+import win32api
+
+
 if contact.noResolution:
     user32.SetProcessDPIAware()
     if not contact.noWarning:
         x = user32.MessageBoxA(0,
-                               "You are using the no resolution (ignoring system scaling) mode, which may cause unforeseen errors! Please consider carefully!\n\nSet 'noWarning' to 'true' in 'conf.toml' and ignore this prompt.\n\n你在使用无分辨率（忽略系统缩放）模式，这可能会导致无法预料的错误！请谨慎考虑！\n\n在“conf.toml”里将“noWarning”设为“true”忽略本提示。\n\nDo you want to continue playing?  是否继续游戏？".encode(
+                               "You are using the no resolution (ignoring system scaling) mode, which may cause "
+                               "unforeseen errors! Please consider carefully!\n\nSet 'noWarning' to 'true' in "
+                               "'conf.toml' and ignore this "
+                               "prompt.\n\n你在使用无分辨率（忽略系统缩放）模式，这可能会导致无法预料的错误！请谨慎考虑！\n\n在“conf.toml”里将“noWarning"
+                               "”设为“true”忽略本提示。\n\nDo you want to continue playing?  是否继续游戏？".encode(
                                    'gbk'), (contact.title + ': Warning!   警告！').encode('gbk'), 0x31)
         if x == 2:
             sys.exit(-1)
@@ -53,7 +52,6 @@ import pygame.freetype
 proc.config(value=1)
 win2.update()
 import pygetwindow
-import win32api
 from map import *
 from items import *
 from pygame.display import get_active
@@ -351,7 +349,7 @@ class MainWindow:
 
 
     def __init__(self):
-        self.savefile = 'save.RGworld'
+        self.savefile = 'saves/save.RGworld'
         self.renderi = 0
         self.renderextra = 0
         self.renderp = 0
@@ -566,6 +564,9 @@ class MainWindow:
                                 process.start()
                                 self.settingwindow = process
 
+                    elif event.key == 115:
+                        self.save()
+
                     elif event.key == 116:
                         ch(self.scale)
                         self.scale *= 1.1
@@ -746,10 +747,11 @@ class MainWindow:
             print(contact.fullsize)
             self.size = contact.fullsize
             self.surface = pygame.display.set_mode(self.size,
-                                                   pygame.RESIZABLE | pygame.DOUBLEBUF | pygame.HWSURFACE | pygame.FULLSCREEN,
+                                                   pygame.FULLSCREEN,
                                                    self.depth, vsync=self.vsync)
         else:
             self.size = self.relsize
+            print(self.relsize)
             self.surface = pygame.display.set_mode(self.relsize,
                                                    pygame.RESIZABLE | pygame.DOUBLEBUF | pygame.HWSURFACE, self.depth,
                                                    vsync=self.vsync)

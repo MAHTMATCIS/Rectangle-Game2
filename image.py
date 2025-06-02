@@ -5,26 +5,34 @@
 # |  | |\    / /|  | |   /  /____\  \ \  |  ⌈¯⌈¯¯|  | |      |  | |      |  | |\    / /|  | |  /  /____\  \ \       |  | |       \  \ \____._.  |  | |    _____  | | #
 # |__|_| \__/_/ |__|_|  /__/_/    \__\_\ |__|_|  |__|_|      ⌊__⌋_⌋      |__|_| \__/_/ |__|_| /__/_/    \__\_\      ⌊__⌋_⌋         \_______|_|  |__|_|   |______/_/  #
 ######################################################################################################################################################################
-import pygame
-import json
-
-from contact import const
-
-fp = open(const)
-
-pygame.init()
-
-image = json.load(fp)['image']
-fp.close()
-raw = {}
 
 
-def init():
-    for i in image:
-        raw[list(i.keys())[0]] = pygame.image.load(list(i.values())[0])
-    print(raw)
+from importable import *
+
+try:
+    raise 1
+except:
+    IMAGE.importable = 1
+    import pygame
+    import json
+
+    from contact import const
+
+    fp = open(const)
+
+    pygame.init()
+
+    image = json.load(fp)['image']
+    fp.close()
+    raw = {}
 
 
-def init2():
-    for i in image:
-        raw[list(i.keys())[0]] = raw[list(i.keys())[0]].convert_alpha()
+    def init():
+        for i in image:
+            raw[list(i.keys())[0]] = pygame.image.load(list(i.values())[0])
+        print(raw)
+
+
+    def init2():
+        for i in image:
+            raw[list(i.keys())[0]] = raw[list(i.keys())[0]].convert_alpha()
