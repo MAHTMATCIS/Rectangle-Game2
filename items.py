@@ -175,7 +175,6 @@ class Bag:
             self.surface.blit(x, (pos[0] - 25 + 2, pos[1] - 25 + 2))
             self.surface.blit(x2, (pos[0] - 25, pos[1] - 25))
             for indexx, ix in enumerate(self.selectbonus):
-                print(ix)
                 if ix is not None:
                     x1 = itemdict[ix]
                     x1 = pygame.transform.scale(x1, (20, 20))
@@ -713,7 +712,6 @@ class Bag:
             self.upgrade_result_bonuslvl[1] = self.upgrade_bonuslvl[1]
 
     def q(self, pos):
-        print('qqqqqqqqq')
         sele = None
         sele2 = None
         sele3 = None

@@ -14,9 +14,8 @@ pygame.init()
 screen_width = win2.winfo_screenwidth()
 screen_height = win2.winfo_screenheight()
 win2.destroy()
-print(screen_width,screen_height)
 
-file=open('conf.toml','rb')
+file = open('data/conf.toml', 'rb')
 conf=tomllib.load(file)
 file.close()
 
@@ -67,6 +66,8 @@ def ch(sc):
     global renderdistance
     renderdistance=sc*renderdistance2
 renderdistancetoscreen=game['renderdistancetoscreen']
+
+savefile = game['savefile']
 
 
 message=conf['message']

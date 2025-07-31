@@ -5,17 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="207a3073-60c6-41e2-9674-4ebbf74a07dc" name="更改" comment="2.1.3 Upgrade version1">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/pygameGAME(2.1beta).iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/importable.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/2_1beta.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf.toml" beforeDir="false" afterPath="$PROJECT_DIR$/conf.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/head.png" beforeDir="false" afterPath="$PROJECT_DIR$/img/head.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CraftTable.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/CraftTable.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/audio/forest1.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/audio/forest1.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf.toml" beforeDir="false" afterPath="$PROJECT_DIR$/data/conf.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/const.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/const.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contact.py" beforeDir="false" afterPath="$PROJECT_DIR$/contact.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font.py" beforeDir="false" afterPath="$PROJECT_DIR$/font.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/ARIALN.TTF" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/ARIALN.TTF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/ARIALNB.TTF" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/ARIALNB.TTF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/ARIALNBI.TTF" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/ARIALNBI.TTF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/ARIALNI.TTF" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/ARIALNI.TTF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/arial.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/arial.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/arialbd.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/arialbd.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/arialbi.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/arialbi.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/ariali.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/ariali.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/ariblk.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/ariblk.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/font/chin.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/font/chin.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/icon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/image.py" beforeDir="false" afterPath="$PROJECT_DIR$/image.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/coin.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/coin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/else.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/else.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/error.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/error.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flower1.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/flower1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flower2.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/flower2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flown.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/flown.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/grass.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/grass.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/head.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/head.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/item/explode.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/item/explode.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/item/healthPoint.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/item/healthPoint.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/item/lightning.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/item/lightning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/item/normal.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/item/normal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/item/phosphor.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/item/phosphor.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/item/puncture.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/item/puncture.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/item/wide.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/item/wide.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/joyback.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/joyback.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/joyforge.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/joyforge.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/none.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/none.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/point.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/point.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/weapon/none.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/static/img/weapon/none.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/items.py" beforeDir="false" afterPath="$PROJECT_DIR$/items.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/map.py" beforeDir="false" afterPath="$PROJECT_DIR$/map.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,15 +112,17 @@
     &quot;Python.font.executor&quot;: &quot;Run&quot;,
     &quot;Python.game.executor&quot;: &quot;Run&quot;,
     &quot;Python.joystick.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.map.executor&quot;: &quot;Run&quot;,
     &quot;Python.scratch.executor&quot;: &quot;Run&quot;,
     &quot;Python.scratch_1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.soup3d_test.executor&quot;: &quot;Run&quot;,
     &quot;Python.。.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/ProgrammingProject/PythonProject/pygameGAME(2.1beta)&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/ProgrammingProject/PythonProject/pygameGAME(2.1beta)/saves&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -98,15 +133,19 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\ProgrammingProject\PythonProject\pygameGAME(2.1beta)\saves" />
       <recent name="D:\ProgrammingProject\PythonProject\pygameGAME(2.1beta)" />
       <recent name="D:\PythonProject\pygameGAME\font" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\ProgrammingProject\PythonProject\pygameGAME(2.1beta)\data" />
+      <recent name="D:\ProgrammingProject\PythonProject\pygameGAME(2.1beta)\static" />
+      <recent name="D:\ProgrammingProject\PythonProject\pygameGAME(2.1beta)" />
       <recent name="D:\ProgrammingProject\PythonProject\pygameGAME(2.1beta)\img" />
       <recent name="D:\ProgrammingProject\PythonProject\pygameGAME(2.1beta)\saves" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="pygameGAME" />
       <option name="ENV_FILES" value="" />
@@ -129,8 +168,8 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
-      <module name="pygameGAME" />
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="pygameGAME(2.1beta)" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -138,9 +177,8 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12 (pygameGAME(2.1beta))" />
-      <option name="WORKING_DIRECTORY" value="D:\ProgrammingProject\PythonProject\pygameGAME(2.1beta)" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
@@ -152,6 +190,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="soup3d_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pygameGAME" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="系统Python 3.14" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/soup3d_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.soup3d_test" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -289,7 +355,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736245812578</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="2.1.3 Upgrade version1">
+      <option name="closed" value="true" />
+      <created>1748843722819</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1748843722820</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

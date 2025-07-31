@@ -1,43 +1,58 @@
 {
   "image": [
-    {"flower1": "img/flower1.png"},
-    {"flower2": "img/flower2.png"},
-    {"flown": "img/flown.png"},
-    {"grass": "img/grass.png"},
-    {"else": "img/else.png"},
     {
-      "joy.back": "img/joyback.png"
+      "flower1": "./data/static/img/flower1.png"
     },
     {
-      "joy.forge": "img/joyforge.png"
-    },
-    {"item.normal": "img/item/normal.png"},
-    {
-      "coin": "img/coin.png"
+      "flower2": "./data/static/img/flower2.png"
     },
     {
-      "error": "img/error.png"
+      "flown": "./data/static/img/flown.png"
     },
     {
-      "point": "img/point.png"
+      "grass": "./data/static/img/grass.png"
     },
     {
-      "item.wide": "img/item/wide.png"
+      "else": "./data/static/img/else.png"
     },
     {
-      "item.phosphor": "img/item/phosphor.png"
+      "joy.back": "./data/static/img/joyback.png"
     },
     {
-      "item.puncture": "img/item/puncture.png"
+      "joy.forge": "./data/static/img/joyforge.png"
     },
     {
-      "item.lightning": "img/item/lightning.png"
+      "item.normal": "./data/static/img/item/normal.png"
     },
     {
-      "item.healthPoint": "img/item/healthPoint.png"
+      "coin": "./data/static/img/coin.png"
     },
     {
-      "item.none": "img/weapon/none.png"
+      "error": "./data/static/img/error.png"
+    },
+    {
+      "point": "./data/static/img/point.png"
+    },
+    {
+      "item.wide": "./data/static/img/item/wide.png"
+    },
+    {
+      "item.phosphor": "./data/static/img/item/phosphor.png"
+    },
+    {
+      "item.puncture": "./data/static/img/item/puncture.png"
+    },
+    {
+      "item.lightning": "./data/static/img/item/lightning.png"
+    },
+    {
+      "item.healthPoint": "./data/static/img/item/healthPoint.png"
+    },
+    {
+      "item.none": "./data/static/img/weapon/none.png"
+    },
+    {
+      "item.explode": "./data/static/img/item/explode.png"
     }
   ],
   "raw_item": [
@@ -45,7 +60,8 @@
     "wide",
     "puncture",
     "phosphor",
-    "lightning"
+    "lightning",
+    "explode"
   ],
   "item_type": [
     "normal",
@@ -53,7 +69,8 @@
     "puncture",
     "phosphor",
     "lightning",
-    "healthPoint"
+    "healthPoint",
+    "explode"
   ],
   "bonus_type": [
     "healthPoint"
@@ -109,6 +126,14 @@
       "sp": 5,
       "timesleep": "20//(lvl[ind]*2)",
       "random": 0.01
+    },
+    "explode": {
+      "size": 35,
+      "forge": "#FF0000",
+      "damage": "self.lvl*3",
+      "sp": 4,
+      "timesleep": "15//lvl[ind]",
+      "random": 0.08
     }
   },
   "bonus.info": {

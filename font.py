@@ -10,7 +10,7 @@ import pygame.font
 pygame.freetype.init()
 
 fil=pygame.font.match_font("fangsong")
-arial=pygame.freetype.Font("font/arial.ttf",20)
+arial = pygame.freetype.Font("data/static/font/arial.ttf", 20)
 chin=pygame.font.Font(fil,40)
 small=pygame.font.Font(fil,15)
 normal=pygame.font.Font(fil,30)

@@ -2,7 +2,7 @@
 size=[800,500]
 title="TRgame"
 icontitle="HELLO?"
-icon="icon.png"
+icon = "./data/icon.png"
 fullscreen = 0
 fullsize = [2560, 1600]
 noResolution = 0                ####
@@ -12,14 +12,13 @@ joystick = false#🎮
 [test]
 test1=false
 test2=false
-#别改
 
 [game]
-const="const.json"
-FPS = 60
-tick=20
-rectick=60
-randomtickspeed = 3000
+const = "./data/static/const.json"
+FPS = 120
+tick = 20
+rectick = 60
+randomtickspeed = 1
 seed="random"
 mousespeed = 2
 cameraspeed = 20
@@ -33,8 +32,10 @@ pondmaxdis=5000
 maxpondcount = 10000
 maxfriendcount=1500
 
-renderdistance=2000
+renderdistance = 4096
 renderdistancetoscreen=false
+
+savefile = "./data/saves/save.RGworld"
 
 [message]
 deathmessage = "You are DIED!"

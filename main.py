@@ -7,74 +7,41 @@
 # |__|_| \__/_/ |__|_|  /__/_/    \__\_\ |__|_|  |__|_|      ⌊__⌋_⌋      |__|_| \__/_/ |__|_| /__/_/    \__\_\      ⌊__⌋_⌋         \_______|_|  |__|_|   |______/_/  #
 ######################################################################################################################################################################
 import json
-import traceback
-
 import joystick
-
-
+import pygame.gfxdraw
 import sys
 from math import *
-from tkinter import *
-from tkinter.ttk import *
 import ctypes
-import contact
-
-user32 = ctypes.windll.user32
-Shcore = ctypes.windll.Shcore
 import win32api
-
-
-if contact.noResolution:
-    user32.SetProcessDPIAware()
-    if not contact.noWarning:
-        x = user32.MessageBoxA(0,
-                               "You are using the no resolution (ignoring system scaling) mode, which may cause "
-                               "unforeseen errors! Please consider carefully!\n\nSet 'noWarning' to 'true' in "
-                               "'conf.toml' and ignore this "
-                               "prompt.\n\n你在使用无分辨率（忽略系统缩放）模式，这可能会导致无法预料的错误！请谨慎考虑！\n\n在“conf.toml”里将“noWarning"
-                               "”设为“true”忽略本提示。\n\nDo you want to continue playing?  是否继续游戏？".encode(
-                                   'gbk'), (contact.title + ': Warning!   警告！').encode('gbk'), 0x31)
-        if x == 2:
-            sys.exit(-1)
-
-win2 = Tk()
-proc = Progressbar(win2, maximum=5)
-proc.pack(padx=10, pady=10)
-win2.update()
 import multiprocessing
-
-multiprocessing.freeze_support()
-import threading
-import time
+import time as timetime
 
 import pygame.freetype
-
-proc.config(value=1)
-win2.update()
+from pygame.display import get_active
 import pygetwindow
+
 from map import *
 from items import *
-from pygame.display import get_active
 import random
 import items
-
-proc.config(value=2)
-win2.update()
 import setting
 from contact import deathmessage, pausemessage, renderdistance, waitmessage, test2
 
-random.seed(contact.seed if contact.seed != 'random' else time.time())
 from base import *
 from font import *
-import time as timetime
+
+from OpenGL.GL import *
+from OpenGL.GLU import *
 
 score = Numbers(0)
 difficult = Numbers(1)
 pondDamage = Numbers(5)
 ind = Numbers(0)
-proc.config(value=3)
-win2.update()
+user32 = ctypes.windll.user32
+Shcore = ctypes.windll.Shcore
+random.seed(contact.seed if contact.seed != 'random' else time.time())
 
+multiprocessing.freeze_support()
 
 # 绘制线段的函数
 def draw_line(screen, start, end, color):
@@ -349,7 +316,7 @@ class MainWindow:
 
 
     def __init__(self):
-        self.savefile = 'saves/save.RGworld'
+        self.savefile = contact.savefile
         self.renderi = 0
         self.renderextra = 0
         self.renderp = 0
@@ -361,8 +328,6 @@ class MainWindow:
         global win2, renderdistance, randomtickspeed
         pygame.init()
 
-        proc.config(value=4)
-        win2.update()
         # const value
         self.vsync = contact.vsync
         self.depth = contact.depth
@@ -392,7 +357,7 @@ class MainWindow:
                                                pygame.RESIZABLE | pygame.DOUBLEBUF | pygame.HWSURFACE, self.depth,
                                                vsync=self.vsync)
 
-        proc.config(value=5)
+
         #surface edition
         pygame.display.set_caption(contact.title, contact.icontitle)
         pygame.display.set_icon(contact.icon)
@@ -423,12 +388,7 @@ class MainWindow:
         self.map = Map()
         self.joy = joystick.JoyStick(self.surface, self.center[0] + 100, self.center[1] + 100)
         self.bag = Bag(self.surface, 20, self.center[1] * 2 - 100)
-        for i in range(10):
-            for j in range(10):
-                blo = Block(self.surface, i - 5, j - 5, self.center)
-
-                blo.init()
-                self.map.append(blo)
+        self.map.fresh(self.surface, self.center, self.pos, Numbers(0))
 
         ####################
 
@@ -772,10 +732,27 @@ class MainWindow:
         self.mouse = self.joy.upd(self.center[0] + 100, self.center[1] + 100)
 
 
-if __name__ == '__main__':
+def main():
+    if contact.noResolution:
+        user32.SetProcessDPIAware()
+        if not contact.noWarning:
+            x = user32.MessageBoxA(0,
+                                   "You are using the no resolution (ignoring system scaling) mode, which may cause "
+                                   "unforeseen errors! Please consider carefully!\n\nSet 'noWarning' to 'true' in "
+                                   "'conf.toml' and ignore this "
+                                   "prompt.\n\n你在使用无分辨率（忽略系统缩放）模式，这可能会导致无法预料的错误！请谨慎考虑！\n\n在“conf.toml”里将“noWarning"
+                                   "”设为“true”忽略本提示。\n\nDo you want to continue playing?  是否继续游戏？".encode(
+                                       'gbk'), (contact.title + ': Warning!   警告！').encode('gbk'), 0x31)
+            if x == 2:
+                sys.exit(-1)
+
     try:
         main = MainWindow()
     except SystemExit:
         pass
     except:
         user32.MessageBoxA(0, traceback.format_exc().encode('gbk'), b'error', 0x10)
+
+
+if __name__ == '__main__':
+    main()

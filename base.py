@@ -6,6 +6,7 @@
 # |__|_| \__/_/ |__|_|  /__/_/    \__\_\ |__|_|  |__|_|      ⌊__⌋_⌋      |__|_| \__/_/ |__|_| /__/_/    \__\_\      ⌊__⌋_⌋         \_______|_|  |__|_|   |______/_/  #
 ######################################################################################################################################################################
 import math
+import traceback
 from random import randint, uniform
 from traceback import print_exc
 
@@ -302,7 +303,7 @@ class Pond(Entity):
                         plst.remove(self)
                     if self.typ == "lightning":
                         sor = sorted(lst, key=self.distance)
-                        for i in range(self.lvl + 2):
+                        for i in range(self.lvl + 2 if len(sor) > self.lvl + 2 else len(sor)):
                             if self.distance(sor[i]) < self.lvl * 100 + 200:
                                 ani = LightAnim(self.surface, self.x, self.y, end=sor[i])
                                 ani.ticks = 10
@@ -311,12 +312,25 @@ class Pond(Entity):
                                 num = Num(self.surface, self.scale, self.center, self.damage, sor[i].x, sor[i].y)
                                 numlst.append(num)
                         return
-
+                    if self.typ == 'explode':
+                        print('animation')
+                        asb = lambda a: (50 * self.lvl + 50) if self.lvl < 30 else 1550
+                        ani = ExplosionAnim(self.surface, self.x, self.y, scale=self.scale, center=self.center,
+                                            max_radius=asb(self.lvl), duration=10)
+                        anima.append(ani)
+                        sor = sorted(lst, key=self.distance)
+                        for i in range(len(sor)):
+                            if self.distance(sor[i]) < (asb(self.lvl)):
+                                sor[i].health -= self.damage
+                                num = Num(self.surface, self.scale, self.center, self.damage, sor[i].x, sor[i].y)
+                                numlst.append(num)
+                        return
+                    print(i)
                     i.health -= self.damage
                     num = Num(self.surface, self.scale, self.center, self.damage, self.x, self.y)
                     numlst.append(num)
-                except:
-                    pass
+                except ValueError:
+                    traceback.print_exc()
 
     def tick(self, player, plst):
         self.ticks += 1
@@ -387,6 +401,33 @@ class LightAnim(Animation):
                                           (self.endx - self.center[0]) * self.scale + self.center[0],
                                           (self.endy - self.center[1]) * self.scale + self.center[1]
                                       ), self.ticks // 2)
+
+
+# ... 其他代码 ...
+
+class ExplosionAnim(Animation):
+    def __init__(self, surface, x, y, scale=1, center=(0, 0), duration=10, max_radius=100):
+        self.max_radius = max_radius
+        self.start_time = pygame.time.get_ticks()
+        self.ticks = duration
+        self.all = self.ticks
+        super().__init__(surface, x, y, scale=scale, center=center)
+        self.ticks = duration
+
+    def update(self, x=0, y=0, scale=1, center=(0, 0), mouse=(0, 0)):
+        self.x += x
+        self.y += y
+        self.scale = scale
+        self.center = center
+        elapsed_time = self.ticks
+        progress = elapsed_time / self.all
+        radius = int(self.max_radius)
+        alpha = int(255 * (progress) / 2)
+        draw_x = int((self.x - center[0]) * scale + center[0])
+        draw_y = int((self.y - center[1]) * scale + center[1])
+        surface = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
+        pygame.draw.circle(surface, (255, 0, 0, alpha), (radius, radius), radius * scale)
+        self.surface.blit(surface, (draw_x - radius, draw_y - radius))
 
 
 class Ptr:

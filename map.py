@@ -69,6 +69,7 @@ class Block:
         self.center = center
         self.seed = hash((x, y)) + (contact.seed if contact.seed != 'random' else time.time())
         self.images = []
+        self.combined_surface = None  # 新增属性，用于存储合并后的 Surface
 
     def init(self, x=0, y=0):
         x = self.center[0] // 2 + x
@@ -98,6 +99,23 @@ class Block:
                       image=image.raw['flower2'])
             self.images.append(i)
         random.seed(contact.seed if contact.seed != 'random' else time.time())
+        self.create_combined_surface()  # 初始化时创建合并后的 Surface
+
+    def create_combined_surface(self):
+        # 计算合并后的 Surface 的大小
+        min_x = min([img.x for img in self.images])
+        min_y = min([img.y for img in self.images])
+        max_x = max([img.x + img.image.get_width() for img in self.images])
+        max_y = max([img.y + img.image.get_height() for img in self.images])
+        width = max_x - min_x
+        height = max_y - min_y
+
+        # 创建合并后的 Surface
+        self.combined_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        for img in self.images:
+            offset_x = img.x - min_x
+            offset_y = img.y - min_y
+            self.combined_surface.blit(img.image, (offset_x, offset_y))
 
     def distance(self, x, y):
         x1 = self.x1 - x
@@ -109,9 +127,19 @@ class Block:
         self.y1 += y
         self.center = center
         if self.distance(*self.center) < renderdistance:
-            x1, y1 = self.center[0] // 2, self.center[1] // 2
-            for i in self.images:
-                i.update(x, y, scale, center, (x1, y1))
+            # 缩放合并后的 Surface
+            scaled_surface = pygame.transform.scale(self.combined_surface,
+                                                    (int(self.combined_surface.get_width() * scale),
+                                                     int(self.combined_surface.get_height() * scale)))
+            # 计算缩放后的 Surface 的中心点偏移量
+            offset_x = scaled_surface.get_width() // 2
+            offset_y = scaled_surface.get_height() // 2
+            # 计算绘制位置，以 center 为中心点
+            draw_x = (self.x1 - center[0]) * scale + center[0] - offset_x
+            draw_y = (self.y1 - center[1]) * scale + center[1] - offset_y
+            # 绘制缩放后的 Surface
+            self.surface.blit(scaled_surface, (draw_x, draw_y))
+
         else:
             for i in self.images:
                 i.x += x
